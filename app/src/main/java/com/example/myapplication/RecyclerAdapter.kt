@@ -5,13 +5,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.view.menu.ActionMenuItemView
 import androidx.recyclerview.widget.RecyclerView
+
+var myTitles = mutableListOf<String>()
+
+var myDetails = mutableListOf<String>()
+
+var myImages = mutableListOf<Int>()
 
 class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
-    private var titles = arrayOf("Item One", "Item Two", "Item Three", "Item Four",
-        "Item Five", "Item Six", "Item Seven", "Item Eight")
+    init {
+
+    }
 
     private var details = arrayOf("Item one details", "Item two details", "Item three details",
         "Item four details", "Item five details", "Item six details", "Item seven details", "Item eight details")
@@ -26,13 +32,13 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
     }
 
     override fun getItemCount(): Int {
-        return titles.size
+        return myTitles.size
     }
 
     override fun onBindViewHolder(holder: RecyclerAdapter.ViewHolder, position: Int) {
-        holder.itemTitle.text = titles[position]
-        holder.itemDetail.text = details[position]
-        holder.itemImage.setImageResource(images[position])
+        holder.itemTitle.text = myTitles[position]
+        holder.itemDetail.text = myDetails[position]
+        holder.itemImage.setImageResource(myImages[position])
     }
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
