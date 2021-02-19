@@ -45,6 +45,11 @@ class MyDBHandler(context: Context, name: String?,
 //        }
 
 
+        myTitles.clear()
+        myDetails.clear()
+        myImages.clear()
+        adapter!!.notifyDataSetChanged()
+
         while (cursor.moveToNext()) {
             val name = cursor.getString(0)
             val id = cursor.getInt(1)
@@ -52,16 +57,23 @@ class MyDBHandler(context: Context, name: String?,
             recipe = Recipe(id, name, ingredients)
 
 
-            myTitles.clear()
-            myDetails.clear()
-            myImages.clear()
-            adapter!!.notifyDataSetChanged()
-
             myTitles.add(name)
             myDetails.add(ingredients)
             myImages.add(R.drawable.android)
             adapter!!.notifyDataSetChanged()
         }
+
+
+//        val c = cursor
+//        var buffer = StringBuffer()
+//        val name = cursor.getString(0)
+//        val id = cursor.getInt(1)
+//        val ingredients = cursor!!.getString(8)
+//        recipe = Recipe(id, name, ingredients)
+//
+//        while (cursor.moveToNext()) {
+//            buffer.append(" " + name)
+//        }
 
         return recipe
     }
