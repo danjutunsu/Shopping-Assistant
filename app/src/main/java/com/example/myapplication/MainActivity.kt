@@ -132,5 +132,10 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, CartActivity::class.java)
             startActivity(intent);
     }
-
+    fun addToCart(pos: Int) {
+        myTitles.add(myTitles[pos])
+        myDetails.add(myTitles[pos] + " Details!")
+        myImages.add(R.drawable.android)
+        adapter!!.notifyDataSetChanged()
+    }
 }

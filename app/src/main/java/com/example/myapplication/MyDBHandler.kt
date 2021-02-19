@@ -1,9 +1,8 @@
 package com.example.myapplication
 
+import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.content.Context
-import android.content.ContentValues
 
 class MyDBHandler(context: Context, name: String?,
                   factory: SQLiteDatabase.CursorFactory?, version: Int) : SQLiteOpenHelper(context, DATABASE_NAME, factory, DATABASE_VERSION) {
@@ -35,17 +34,34 @@ class MyDBHandler(context: Context, name: String?,
 
         var recipe: Recipe? = null
 
-        if (cursor.moveToFirst()) {
-            cursor.moveToFirst()
+//        if (cursor.moveToFirst()) {
+//            cursor.moveToFirst()
+//
+//            val name = cursor.getString(0)
+//            val id = cursor.getInt(1)
+//            val ingredients = cursor.getString(8)
+//            recipe = Recipe(id, name, ingredients)
+//            cursor.close()
+//        }
 
+
+        while (cursor.moveToNext()) {
             val name = cursor.getString(0)
             val id = cursor.getInt(1)
             val ingredients = cursor.getString(8)
             recipe = Recipe(id, name, ingredients)
-            cursor.close()
-        }
 
-        db.close()
+
+            myTitles.clear()
+            myDetails.clear()
+            myImages.clear()
+            adapter!!.notifyDataSetChanged()
+
+            myTitles.add(name)
+            myDetails.add(ingredients)
+            myImages.add(R.drawable.android)
+            adapter!!.notifyDataSetChanged()
+        }
 
         return recipe
     }
@@ -57,7 +73,7 @@ class MyDBHandler(context: Context, name: String?,
     companion object {
 
         private val DATABASE_VERSION = 1
-        private val DATABASE_NAME = "db.db"
+        private val DATABASE_NAME = "database.db"
         val TABLE_recipes = "recipes"
 
         val COLUMN_ID = "RecipeID"

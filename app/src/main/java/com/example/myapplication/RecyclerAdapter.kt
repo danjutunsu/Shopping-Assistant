@@ -17,6 +17,8 @@ import kotlinx.android.synthetic.main.list_layout.view.*
 import kotlinx.android.synthetic.main.list_layout.*
 
 internal lateinit var delBtn: Button
+internal lateinit var addBtn: Button
+
 
 
 var myTitles = mutableListOf<String>()
@@ -29,7 +31,6 @@ var position = 0
 var layoutManager: RecyclerView.LayoutManager? = null
 var adapter: RecyclerView.Adapter<CustomViewHolder>? = null
 
-var clicked = false
 
 class RecyclerAdapter : RecyclerView.Adapter<CustomViewHolder>() {
 
@@ -64,6 +65,49 @@ class RecyclerAdapter : RecyclerView.Adapter<CustomViewHolder>() {
 }
 
 class CustomViewHolder(val view: View): ViewHolder(view) {
+    var itemImage: ImageView
+    var itemTitle: TextView
+    var itemDetail: TextView
+
+
+    init {
+        itemImage = itemView.findViewById(R.id.item_image)
+        itemTitle = itemView.findViewById(R.id.item_title)
+        itemDetail = itemView.findViewById(R.id.item_detail)
+
+        delBtn = itemView.findViewById(R.id.deleteButton)!!
+        addBtn = itemView.findViewById(R.id.addButton)!!
+
+
+        //deletes item when x clicked
+        delBtn!!.setOnClickListener {
+            MainActivity().deleteItem(adapterPosition)
+        }
+
+        //add item when + clicked
+        addBtn!!.setOnClickListener {
+            MainActivity().addToCart(adapterPosition)
+        }
+
+        view.setOnClickListener {
+            RecyclerAdapter().setPosition(adapterPosition)
+
+            //Changes color on click
+//            if (clicked) {
+//                view.setBackgroundColor(BLACK)
+//            }
+//            else
+//            {
+//                view.setBackgroundColor(BLACK)
+//            }
+//            MainActivity().deleteItem(adapterPosition)
+            adapter?.notifyDataSetChanged()
+
+        }
+    }
+}
+
+class CartViewHolder(val view: View): ViewHolder(view) {
     var itemImage: ImageView
     var itemTitle: TextView
     var itemDetail: TextView
