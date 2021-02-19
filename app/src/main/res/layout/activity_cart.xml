@@ -6,27 +6,96 @@
     android:layout_height="match_parent"
     tools:context=".CartActivity">
 
-    <TextView
-        android:layout_width="50dp"
-        android:layout_height="22dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentBottom="true"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="362dp"
-        android:layout_marginBottom="347dp"
-        android:text="@string/home"></TextView>
-
-    <Button
-        android:id="@+id/homeButton"
-        android:onClick="goHome"
-        android:layout_width="wrap_content"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="33dp"
-        android:layout_marginLeft="33dp"
-        android:layout_marginTop="36dp"
-        android:text="Home" />
+        android:layout_margin="5dp"
+        app:cardBackgroundColor="#db3030"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="3dp"
+        app:contentPadding="4dp">
+
+        <Button
+            android:id="@+id/homeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="goHome"
+            android:text="Home" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/relativeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="109dp"
+            android:padding="11dp">
+
+            <TextView
+                android:layout_width="50dp"
+                android:layout_height="22dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:text="@string/home"
+                tools:layout_editor_absoluteX="172dp"
+                tools:layout_editor_absoluteY="353dp"></TextView>
+
+            <ImageView
+                android:id="@+id/item_image"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+            </ImageView>
+
+            <TextView
+                android:id="@+id/item_title"
+                android:layout_width="236dp"
+                android:layout_height="39dp"
+                android:layout_marginStart="11dp"
+                android:layout_marginLeft="11dp"
+                android:textSize="30sp"
+                app:layout_constraintLeft_toRightOf="@id/item_image"
+                app:layout_constraintTop_toTopOf="parent"></TextView>
+
+            <TextView
+                android:id="@+id/item_detail"
+                android:layout_width="237dp"
+                android:layout_height="23dp"
+                android:layout_marginLeft="11dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintLeft_toRightOf="@id/item_image"
+                app:layout_constraintTop_toBottomOf="@+id/item_title"></TextView>
+
+            <Button
+                android:id="@+id/addButton"
+                android:onClick="addToCart"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginRight="4dp"
+                android:text="+"
+                android:textSize="14sp"
+                app:backgroundTint="#4CAF50"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <Button
+                android:id="@+id/deleteButton"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginRight="4dp"
+                android:text="X"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
 
 </RelativeLayout>

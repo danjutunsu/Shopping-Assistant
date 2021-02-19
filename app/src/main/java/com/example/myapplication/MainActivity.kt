@@ -1,32 +1,29 @@
 package com.example.myapplication
 
-import android.app.Activity
+import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.Color.red
 import android.os.Bundle
-import android.view.ContextMenu
+import android.view.ContextThemeWrapper
 import android.view.View
-import android.widget.Adapter
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.view.menu.MenuView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.list_layout.*
 
+internal lateinit var deleteIt: Button
+
 class MainActivity : AppCompatActivity() {
-
-    var layoutManager: RecyclerView.LayoutManager? = null
-    var adapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>? = null
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
 
         layoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = layoutManager
@@ -34,36 +31,62 @@ class MainActivity : AppCompatActivity() {
         adapter = RecyclerAdapter()
         recyclerView.adapter = adapter
 
+//        deleteIt = findViewById(R.id.deleteSelected)!!
+//
+//        deleteIt!!.setOnClickListener {
+//            println("Hello there.")
+//        }
     }
-    var num = 0
 
-    var titles : MutableList<String> = mutableListOf()
 
-    var details : MutableList<String> = mutableListOf("Item one details", "Item two details", "Item three details",
-            "Item four details")
+    val positiveButtonClick = { dialog: DialogInterface, which: Int ->
+        deleteItem(RecyclerAdapter().getPosition())
+        Toast.makeText(applicationContext,
+        android.R.string.yes, Toast.LENGTH_SHORT).show()
+    }
+    val negativeButtonClick = { dialog: DialogInterface, which: Int ->
+        Toast.makeText(applicationContext,
+            android.R.string.no, Toast.LENGTH_SHORT).show()
+    }
+    val neutralButtonClick = { dialog: DialogInterface, which: Int ->
+        Toast.makeText(applicationContext,
+            "Maybe", Toast.LENGTH_SHORT).show()
+    }
 
-    var images : MutableList<Int> = mutableListOf(R.drawable.android, R.drawable.android, R.drawable.android,
-            R.drawable.android)
+//    fun clickDelete(view: View) {
+////        val button = view.findViewById<Button>(R.id.deleteButton)
+//
+//        val builder = AlertDialog.Builder(ContextThemeWrapper(this, android.R.style.Holo_SegmentedButton))
+//
+//        with(builder)
+//        {
+//            setTitle("Remove Item")
+//            setMessage("Are you sure you want to remove this item from your cart?")
+//            setPositiveButton("Yes", DialogInterface.OnClickListener(function = positiveButtonClick))
+//            setNegativeButton(android.R.string.no, negativeButtonClick)
+//            setNeutralButton("Maybe", neutralButtonClick)
+//            show()
+//        }
+//    }
 
-    var newTitles = titles
+    fun delButtonClicked() {
+        myTitles.removeAt(RecyclerAdapter().getPosition())
+        myDetails.removeAt(RecyclerAdapter().getPosition())
+        myImages.removeAt(RecyclerAdapter().getPosition())
+        adapter!!.notifyDataSetChanged()
+    }
 
-    var newDetails = details
+    fun deleteItem(pos: Int) {
+        myTitles.removeAt(pos)
+        myDetails.removeAt(pos)
+        myImages.removeAt(pos)
+        adapter!!.notifyDataSetChanged()
+    }
 
-    var newImages = images
-
-    fun main(view: View) {
+    fun addItem(view: View) {
         myTitles.add("Item " + myTitles.size.plus(1))
         myDetails.add(myTitles[myTitles.size.minus(1)] + " Details!")
         myImages.add(R.drawable.android)
-        adapter!!.notifyDataSetChanged()
-
-        println("My Array::: ")
-        println(newTitles)
-        println(newDetails)
-        println(newImages.size)
-
-        num += 1
-        println("num is now: " + num)
         adapter!!.notifyDataSetChanged()
     }
 
@@ -84,6 +107,12 @@ class MainActivity : AppCompatActivity() {
             println("RECIPE FOUND. Name is: " + recipe.recipeName + ". ID is: " + recipe.id)
             println("Ingredients are: " + recipe.ingredients)
 
+            //Populate recyclerview
+            recipe.recipeName?.let { myTitles.add(it) }
+            recipe.ingredients?.let { myDetails.add(it) }
+            myImages.add(R.drawable.android)
+            adapter!!.notifyDataSetChanged()
+
             //Toast
             val text = "Searching..."
             val duration = Toast.LENGTH_SHORT
@@ -103,4 +132,5 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, CartActivity::class.java)
             startActivity(intent);
     }
+
 }
