@@ -1,23 +1,27 @@
 package com.example.myapplication
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.Color.red
 import android.os.Bundle
+import android.view.ContextThemeWrapper
 import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.list_layout.*
 
 internal lateinit var deleteIt: Button
-
-var current = "MainActivity"
 
 class MainActivity : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -27,22 +31,62 @@ class MainActivity : AppCompatActivity() {
         adapter = RecyclerAdapter()
         recyclerView.adapter = adapter
 
+//        deleteIt = findViewById(R.id.deleteSelected)!!
+//
+//        deleteIt!!.setOnClickListener {
+//            println("Hello there.")
+//        }
+    }
+
+
+    val positiveButtonClick = { dialog: DialogInterface, which: Int ->
+        deleteItem(RecyclerAdapter().getPosition())
+        Toast.makeText(applicationContext,
+        android.R.string.yes, Toast.LENGTH_SHORT).show()
+    }
+    val negativeButtonClick = { dialog: DialogInterface, which: Int ->
+        Toast.makeText(applicationContext,
+            android.R.string.no, Toast.LENGTH_SHORT).show()
+    }
+    val neutralButtonClick = { dialog: DialogInterface, which: Int ->
+        Toast.makeText(applicationContext,
+            "Maybe", Toast.LENGTH_SHORT).show()
+    }
+
+//    fun clickDelete(view: View) {
+////        val button = view.findViewById<Button>(R.id.deleteButton)
+//
+//        val builder = AlertDialog.Builder(ContextThemeWrapper(this, android.R.style.Holo_SegmentedButton))
+//
+//        with(builder)
+//        {
+//            setTitle("Remove Item")
+//            setMessage("Are you sure you want to remove this item from your cart?")
+//            setPositiveButton("Yes", DialogInterface.OnClickListener(function = positiveButtonClick))
+//            setNegativeButton(android.R.string.no, negativeButtonClick)
+//            setNeutralButton("Maybe", neutralButtonClick)
+//            show()
+//        }
+//    }
+
+    fun delButtonClicked() {
+        myTitles.removeAt(RecyclerAdapter().getPosition())
+        myDetails.removeAt(RecyclerAdapter().getPosition())
+        myImages.removeAt(RecyclerAdapter().getPosition())
+        adapter!!.notifyDataSetChanged()
     }
 
     fun deleteItem(pos: Int) {
         myTitles.removeAt(pos)
         myDetails.removeAt(pos)
         myImages.removeAt(pos)
-        if (current == "CartActivity") {
-        cart.removeAt(pos)
-        }
         adapter!!.notifyDataSetChanged()
     }
 
     fun addItem(view: View) {
         myTitles.add("Item " + myTitles.size.plus(1))
         myDetails.add(myTitles[myTitles.size.minus(1)] + " Details!")
-        myImages.add(R.drawable.food)
+        myImages.add(R.drawable.android)
         adapter!!.notifyDataSetChanged()
     }
 
@@ -66,8 +110,7 @@ class MainActivity : AppCompatActivity() {
             //Populate recyclerview
             recipe.recipeName?.let { myTitles.add(it) }
             recipe.ingredients?.let { myDetails.add(it) }
-            recipe.instructions?.let { myInstructions.add(it) }
-            myImages.add(R.drawable.food)
+            myImages.add(R.drawable.android)
             adapter!!.notifyDataSetChanged()
 
             //Toast
@@ -86,64 +129,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun goToCart(view: View) {
-        current = "CartActivity"
-
-        myTitles.clear()
-        myDetails.clear()
-        myImages.clear()
-        val intent = Intent(this, CartActivity::class.java)
-        startActivity(intent);
+            val intent = Intent(this, CartActivity::class.java)
+            startActivity(intent);
     }
-
-    fun goToBrowse(view: View) {
-        current = "BrowseActivity"
-
-        val intent = Intent(this, BrowseActivity::class.java)
-
-        myTitles.clear()
-        myDetails.clear()
-        myImages.clear()
-        adapter!!.notifyDataSetChanged()
-        startActivity(intent);
-    }
-
-
     fun addToCart(pos: Int) {
-        cart.add(myTitles[pos])
         myTitles.add(myTitles[pos])
         myDetails.add(myTitles[pos] + " Details!")
-        myImages.add(R.drawable.food)
+        myImages.add(R.drawable.android)
         adapter!!.notifyDataSetChanged()
     }
-
-    fun addToDetails(pos: Int) {
-        var tempTitle = myTitles[pos]
-        var tempDetails = myDetails[pos]
-        var tempInstructions = myInstructions[pos]
-        myTitles.clear()
-        myDetails.clear()
-        myImages.clear()
-        myInstructions.clear()
-        adapter!!.notifyDataSetChanged()
-
-        myTitles.add(tempTitle)
-        myDetails.add(tempDetails)
-        myImages.add(R.drawable.food)
-        myInstructions.add(tempInstructions)
-        adapter!!.notifyDataSetChanged()
-    }
-
-    fun openCard(pos: Int) {
-        selectedItem.add(myTitles[pos])
-        adapter!!.notifyDataSetChanged()
-
-        myTitles.add(selectedItem[0])
-    }
-
-    fun goToDetails(view: View) {
-        current = "DetailsActivity"
-
-        val intent = Intent(this, DetailsActivity::class.java)
-
-        startActivity(intent)}
 }
