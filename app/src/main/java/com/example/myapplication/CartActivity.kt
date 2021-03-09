@@ -1,11 +1,15 @@
 package com.example.myapplication
 
+import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.View.GONE
 import android.view.View.INVISIBLE
+import android.widget.Toast
+import androidx.core.view.iterator
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_browse.*
 import kotlinx.android.synthetic.main.activity_cart.cartRecyclerView
@@ -25,16 +29,25 @@ class CartActivity : AppCompatActivity() {
         cartAdapter = CartRecyclerAdapter()
         cartRecyclerView.adapter = cartAdapter
 
-        callCart()
-    }
+        supportActionBar?.title = "Shopping Cart"
 
-    private fun callCart() {
-        for (element in cart) {
-            myTitles.add(element)
-            myDetails.add(element + " Details!")
-            myImages.add(R.drawable.food)
-            cartAdapter!!.notifyDataSetChanged()
-        }
+        val dbHandler = CartDBHandler(this, null, null, 1)
+
+        dbHandler.callCart()
+    }
+    fun callCart(recipeName: String): Recipe?
+    {
+        val dbHandler = CartDBHandler(this, null, null, 1)
+
+
+
+//        for (element in cart) {
+//            myTitles.add(element)
+//            myDetails.add(element + " Details!")
+//            myImages.add(R.drawable.food)
+//            cartAdapter!!.notifyDataSetChanged()
+//        }
+        return null
     }
 
     fun goHome(view: View) {
@@ -72,5 +85,45 @@ class CartActivity : AppCompatActivity() {
         myImages.add(R.drawable.food)
         cartAdapter!!.notifyDataSetChanged()
         println(getSuggestion("Chicken"))
+    }
+
+    fun goToFavorites(view: View) {
+        current = "FavoritesActivity"
+
+        val intent = Intent(this, FavoritesActivity::class.java)
+
+        myTitles.clear()
+        myDetails.clear()
+        myImages.clear()
+        adapter!!.notifyDataSetChanged()
+        startActivity(intent);
+    }
+
+    fun goToBrowse(view: View) {
+        current = "BrowseActivity"
+
+        val intent = Intent(this, BrowseActivity::class.java)
+
+        intent.putExtra("Main Activity", "Daniel")
+        var b = Bundle()
+        b.putBoolean("is active", true)
+        intent.putExtras(b)
+        myTitles.clear()
+        myDetails.clear()
+        myImages.clear()
+        adapter!!.notifyDataSetChanged()
+        startActivity(intent);
+    }
+
+    fun goToSuggestions(view: View) {
+        current = "SuggestionsActivity"
+
+        val intent = Intent(this, SuggestionsActivity::class.java)
+
+        myTitles.clear()
+        myDetails.clear()
+        myImages.clear()
+        adapter!!.notifyDataSetChanged()
+        startActivity(intent);
     }
 }

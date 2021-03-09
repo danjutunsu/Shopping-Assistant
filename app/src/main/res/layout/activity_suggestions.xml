@@ -7,15 +7,16 @@
     android:background="#FFFFFF">
 
     <ImageView
-        android:id="@+id/suggestionsButton2"
-        android:onClick="goToSuggestions"
-        android:layout_width="54dp"
-        android:layout_height="61dp"
-        android:layout_marginStart="212dp"
-        android:layout_marginLeft="212dp"
+        android:id="@+id/browseBtn2"
+        android:layout_width="55dp"
+        android:layout_height="54dp"
+        android:layout_marginStart="208dp"
+        android:layout_marginLeft="208dp"
+        android:layout_marginTop="4dp"
+        android:onClick="goToBrowse"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/exclaim" />
+        app:srcCompat="@drawable/list" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="56dp"
@@ -78,7 +79,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/browseRecyclerView"
+        android:id="@+id/suggestionsRecyclerView"
         android:layout_width="414dp"
         android:layout_height="580dp"
         app:layout_constraintBottom_toBottomOf="parent"

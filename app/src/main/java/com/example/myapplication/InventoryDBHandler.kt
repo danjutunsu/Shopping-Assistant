@@ -1,22 +1,17 @@
 package com.example.myapplication
 
 import android.content.Context
-import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.graphics.BlendMode
-import android.graphics.Color
-import android.graphics.Color.BLACK
 import android.view.View
 import android.widget.Button
-import android.widget.Toast
-import androidx.core.graphics.toColor
-import androidx.core.graphics.toColorInt
 import kotlinx.android.synthetic.main.list_layout.*
 
 
-class MyDBHandler(context: Context?, name: String?,
-                  factory: SQLiteDatabase.CursorFactory?, version: Int) : SQLiteOpenHelper(context, DATABASE_NAME, null, 2) {
+class InventoryDBHandler(context: Context,
+    name: String?, factory: SQLiteDatabase.CursorFactory?,
+    version: Int
+) : SQLiteOpenHelper(context, DATABASE_NAME, null, 2) {
 
 
     override fun onCreate(db: SQLiteDatabase) {
@@ -26,18 +21,22 @@ class MyDBHandler(context: Context?, name: String?,
 //                COLUMN_NAME
 //                + " TEXT," + ")")
 //        db.execSQL(CREATE_RECIPES_TABLE)
+
     }
 
     fun findSuggestion(suggestion: String): String? {
         val db = this.writableDatabase
 
-        val sugg = "SELECT * FROM $TABLE_recipes WHERE $COLUMN_NAME LIKE  \"%$suggestion%\" ORDER BY RANDOM()"
+        val sugg = "SELECT * FROM $TABLE WHERE $COLUMN_NAME LIKE  \"%$suggestion%\""
 
-        db.rawQuery(sugg, null).use {
-            if (it.moveToFirst()) {
-                val result = it.getString(0)
-                return result
-            }
+        val cursor = db.rawQuery(sugg, null)
+
+        while (cursor.moveToNext()) {
+            val name = cursor.getString(0)
+            val category = cursor.getString(1)
+            myTitles.add(name)
+            myDetails.add(category)
+            myImages.add(R.drawable.food)
         }
         return null
     }
@@ -45,7 +44,7 @@ class MyDBHandler(context: Context?, name: String?,
     fun findSuggestionIngredients(suggestion: String): String? {
         val db = this.writableDatabase
 
-        val ingredients = "SELECT * FROM $TABLE_recipes WHERE $COLUMN_NAME LIKE  \"%$suggestion%\""
+        val ingredients = "SELECT * FROM $TABLE WHERE $COLUMN_NAME LIKE  \"%$suggestion%\""
 
         db.rawQuery(ingredients, null).use {
             if (it.moveToFirst()) {
@@ -59,7 +58,7 @@ class MyDBHandler(context: Context?, name: String?,
     fun findSuggestionInstructions(suggestion: String): String? {
         val db = this.writableDatabase
 
-        val instructions = "SELECT * FROM $TABLE_recipes WHERE $COLUMN_NAME LIKE  \"%$suggestion%\""
+        val instructions = "SELECT * FROM $TABLE WHERE $COLUMN_NAME LIKE  \"%$suggestion%\""
 
         db.rawQuery(instructions, null).use {
             if (it.moveToFirst()) {
@@ -70,42 +69,19 @@ class MyDBHandler(context: Context?, name: String?,
         return null
     }
 
-    fun lookupRecipe(context: Context, pos: Int) {
-        var name = myTitles[pos]
-        val dbHandler = MyDBHandler(context, null, null, 1)
-
-        var recipe = dbHandler.findRecipeBrowse(context, name)
-
-        if (recipe != null) {
-            println("RECIPE FOUND. Name is: " + recipe.recipeName + ". ID is: " + recipe.id)
-            println("Ingredients are: " + recipe.ingredients)
-
-            //Populate recyclerview
-            recipe.recipeName?.let { myTitles.add(it) }
-            recipe.ingredients?.let { myDetails.add(it) }
-            recipe.instructions?.let { myInstructions.add(it) }
-            myImages.add(R.drawable.food)
-            browseAdapter!!.notifyDataSetChanged()
-
-            //Toast
-            val text = "Searching..."
-            val duration = Toast.LENGTH_SHORT
-            val toast = Toast.makeText(context, text, duration)
-            toast.show()
-        }
-        else {
-            val text = "No Match Found"
-            val duration = Toast.LENGTH_SHORT
-            val toast = Toast.makeText(context, text, duration)
-            toast.show()
-        }
-    }
-
     fun findRecipe(recipeName: String): Recipe? {
         val query =
-                "SELECT * FROM $TABLE_recipes WHERE $COLUMN_NAME LIKE  \"%$recipeName%\""
+                "SELECT * FROM $TABLE WHERE $COLUMN_NAME LIKE  \"%$recipeName%\""
+
+        val idQuery =
+                "SELECT RecipeID FROM $TABLE WHERE $COLUMN_NAME =  \"$recipeName\""
+
 
         var db = this.writableDatabase
+
+        val cursors = db.rawQuery(idQuery, null)
+
+        println("id is: " + cursors)
 
         val cursor = db.rawQuery(query, null)
 
@@ -141,7 +117,6 @@ class MyDBHandler(context: Context?, name: String?,
             myInstructions.add(instructions)
             myImages.add(R.drawable.food)
             adapter!!.notifyDataSetChanged()
-
         }
 
 
@@ -156,16 +131,18 @@ class MyDBHandler(context: Context?, name: String?,
 //            buffer.append(" " + name)
 //        }
         cursor.close()
+        cursors.close()
         db.close()
 
         return recipe
     }
 
-    fun findRecipeBrowse(context: Context, recipeName: String): Recipe? {
-        var db = this.writableDatabase
+    fun findRecipeBrowse(recipeName: String): Recipe? {
 
         val query =
-                "SELECT * FROM $TABLE_recipes WHERE $INGREDIENTS LIKE  \"%$recipeName%\""
+                "SELECT * FROM $TABLE WHERCO$COLUMN_NAME LIKE  \"%$recipeName%\""
+
+        var db = this.writableDatabase
 
         var cursor = db.rawQuery(query, null)
 
@@ -186,6 +163,7 @@ class MyDBHandler(context: Context?, name: String?,
         myDetails.clear()
         myImages.clear()
         myInstructions.clear()
+        browseAdapter!!.notifyDataSetChanged()
 
         while (cursor.moveToNext()) {
             val name = cursor.getString(0)
@@ -199,6 +177,7 @@ class MyDBHandler(context: Context?, name: String?,
             myDetails.add(ingredients)
             myInstructions.add(instructions)
             myImages.add(R.drawable.food)
+            browseAdapter!!.notifyDataSetChanged()
         }
 
 
@@ -226,13 +205,10 @@ class MyDBHandler(context: Context?, name: String?,
     companion object {
 
         private val DATABASE_VERSION = 1
-        internal val DATABASE_NAME = "database.db"
-        internal val INVENTORY_DATABASE = "inventory.sql"
-        val TABLE_recipes = "recipes"
+        internal val DATABASE_NAME = "inventory.db"
+        val TABLE = "inventory"
 
-        val COLUMN_ID = "RecipeID"
-        val COLUMN_NAME = "RecipeName"
-        val INGREDIENTS = "Ingredients"
+        val COLUMN_NAME = "food_name"
     }
 
 }

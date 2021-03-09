@@ -1,20 +1,29 @@
 package com.example.myapplication
 
+import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.view.View.GONE
+import android.widget.Button
 import android.widget.Toast
-import androidx.cardview.widget.CardView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_browse.*
-import kotlinx.android.synthetic.main.activity_browse.name
-import kotlinx.android.synthetic.main.list_layout.*
 
-var inventory = mutableListOf<String>("Chicken", "Rice", "Beans", "Milk", "Eggs", "Salt", "Pepper", "Sugar")
+
+var inventory = mutableListOf<String>()
+
+
+var thisNum: Int = 0
+
+lateinit var button : Button
+
+fun increaseNum(view: View, add: Int) {
+    thisNum += add
+}
 
 class BrowseActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_browse)
@@ -25,8 +34,21 @@ class BrowseActivity : AppCompatActivity() {
         browseAdapter = BrowseRecyclerAdapter()
         browseRecyclerView.adapter = browseAdapter
 
-        callInventory()
+        supportActionBar?.title = "Browse Food"
+
+        searchInventory("a")
+    }
+
+    fun searchInventory(input: String) {
+        InventoryDBHandler(this, null,null,1).findSuggestion(input)
+    }
+
+    var thisNum: Int = 0
+
+    fun changeNum(pos: Int) {
+        thisNum = pos
         browseAdapter!!.notifyDataSetChanged()
+        println(thisNum)
     }
 
     private fun callInventory() {
@@ -46,46 +68,6 @@ class BrowseActivity : AppCompatActivity() {
         return name
     }
 
-    fun lookupRecipeBrowse(view: View) {
-        val dbHandler = MyDBHandler(this, null, null, 1)
-
-        var itemName = "chicken"
-        val recipe = dbHandler.findRecipeBrowse(itemName)
-
-        var textField = name.text.toString()
-
-        if (textField.isEmpty()) {
-            val text = "Field is empty"
-            val duration = Toast.LENGTH_SHORT
-            val toast = Toast.makeText(applicationContext, text, duration)
-            toast.show()
-        }
-        else if (recipe != null) {
-            println("RECIPE FOUND. Name is: " + recipe.recipeName + ". ID is: " + recipe.id)
-            println("Ingredients are: " + recipe.ingredients)
-
-            //Populate recyclerview
-            recipe.recipeName?.let { myTitles.add(it) }
-            recipe.ingredients?.let { myDetails.add(it) }
-            recipe.instructions?.let { myInstructions.add(it) }
-            myImages.add(R.drawable.food)
-            browseAdapter!!.notifyDataSetChanged()
-
-            //Toast
-            val text = "Searching..."
-            val duration = Toast.LENGTH_SHORT
-            val toast = Toast.makeText(applicationContext, text, duration)
-            toast.show()
-        }
-        else {
-            val text = "Not Match Found"
-            val duration = Toast.LENGTH_SHORT
-            val toast = Toast.makeText(applicationContext, text, duration)
-            toast.show()
-        }
-
-    }
-
     fun getSpecificSuggestion(s: String): Recipe? {
 //        return myTitles[position]
         val dbHandler = MyDBHandler(this, null, null, 1)
@@ -99,6 +81,8 @@ class BrowseActivity : AppCompatActivity() {
         myTitles.clear()
         myDetails.clear()
         myImages.clear()
+        adapter!!.notifyDataSetChanged()
+
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
     }
@@ -113,24 +97,21 @@ class BrowseActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    fun addItem(view: View) {
-        myTitles.add("Item " + myTitles.size.plus(1))
-        myDetails.add(myTitles[myTitles.size.minus(1)] + " Details!")
-        myImages.add(R.drawable.food)
-        browseAdapter!!.notifyDataSetChanged()
-    }
+    fun addToCart(pos: Int) {
 
-    fun getSuggestion(view: View) {
-        myTitles.clear()
-        myDetails.clear()
-        myImages.clear()
-        suggestion.visibility = GONE
+        var name = myTitles[pos]
+        var details = myDetails[pos]
+        val dbHandler = CartDBHandler(this, null, null, 1)
 
-        getSuggestion("Chicken")?.let { myTitles.add(it) }
-        myDetails.add(getSuggestion("Chicken") + " Details!")
+        var db = dbHandler.writableDatabase
+
+        db.execSQL("INSERT INTO cart('food_name', 'group') VALUES($name, $details")
+        cart.add(myTitles[pos])
+        myTitles.add(myTitles[pos])
+        myDetails.add(myTitles[pos] + " Details!")
         myImages.add(R.drawable.food)
-        browseAdapter!!.notifyDataSetChanged()
-        println(getSuggestion("Chicken"))
+        myInstructions.add("INSTRUCTIONS")
+        adapter!!.notifyDataSetChanged()
     }
 
     fun getSpecificSuggestion(view: View) {
@@ -139,8 +120,40 @@ class BrowseActivity : AppCompatActivity() {
         myImages.clear()
     }
 
-    fun thisButton(view: View) {
-        RecyclerAdapter().setPosition(position)
-        lookupRecipeBrowse(view)}
+    fun goToBrowse(view: View) {
+        current = "BrowseActivity"
+
+        val intent = Intent(this, BrowseActivity::class.java)
+
+        myTitles.clear()
+        myDetails.clear()
+        myImages.clear()
+        adapter!!.notifyDataSetChanged()
+        startActivity(intent);
+    }
+
+    fun goToFavorites(view: View) {
+        current = "FavoritesActivity"
+
+        val intent = Intent(this, FavoritesActivity::class.java)
+
+        myTitles.clear()
+        myDetails.clear()
+        myImages.clear()
+        adapter!!.notifyDataSetChanged()
+        startActivity(intent);
+    }
+
+    fun goToSuggestions(view: View) {
+        current = "SuggestionsActivity"
+
+        val intent = Intent(this, SuggestionsActivity::class.java)
+
+        myTitles.clear()
+        myDetails.clear()
+        myImages.clear()
+        adapter!!.notifyDataSetChanged()
+        startActivity(intent);
+    }
 }
 

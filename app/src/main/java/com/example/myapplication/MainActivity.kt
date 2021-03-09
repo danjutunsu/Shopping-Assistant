@@ -1,20 +1,17 @@
 package com.example.myapplication
 
 import android.content.Intent
+import android.database.sqlite.SQLiteOpenHelper
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
 
-internal lateinit var deleteIt: Button
-
 var current = "MainActivity"
 
 class MainActivity : AppCompatActivity() {
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -27,6 +24,7 @@ class MainActivity : AppCompatActivity() {
         adapter = RecyclerAdapter()
         recyclerView.adapter = adapter
 
+        supportActionBar?.title = "Home Screen"
     }
 
     fun deleteItem(pos: Int) {
@@ -34,16 +32,25 @@ class MainActivity : AppCompatActivity() {
         myDetails.removeAt(pos)
         myImages.removeAt(pos)
         if (current == "CartActivity") {
-        cart.removeAt(pos)
+            cart.removeAt(pos)
+            cartAdapter?.notifyDataSetChanged()
+        }
+        if (current == "FavoritesActivity") {
+            likedRecipes.removeAt(pos)
+            likedRecipeIngredients.removeAt(pos)
+            favoritesAdapter?.notifyDataSetChanged()
         }
         adapter!!.notifyDataSetChanged()
     }
 
-    fun addItem(view: View) {
-        myTitles.add("Item " + myTitles.size.plus(1))
-        myDetails.add(myTitles[myTitles.size.minus(1)] + " Details!")
-        myImages.add(R.drawable.food)
+    fun addToLiked(pos: Int) {
+        likedRecipes.add(myTitles[pos])
+        likedRecipeIngredients.add(myDetails[pos])
+        likedInstructions.add(myInstructions[pos])
+        //incorporate instructions into add event
+
         adapter!!.notifyDataSetChanged()
+        println(likedRecipes)
     }
 
     fun lookupRecipe(view: View) {
@@ -100,6 +107,10 @@ class MainActivity : AppCompatActivity() {
 
         val intent = Intent(this, BrowseActivity::class.java)
 
+        intent.putExtra("Main Activity", "Daniel")
+        var b = Bundle()
+        b.putBoolean("is active", true)
+        intent.putExtras(b)
         myTitles.clear()
         myDetails.clear()
         myImages.clear()
@@ -109,10 +120,16 @@ class MainActivity : AppCompatActivity() {
 
 
     fun addToCart(pos: Int) {
+        var name = myTitles[pos]
+        var details = myDetails[pos]
+        val dbHandler = CartDBHandler(this, null, null, 1)
+
+        dbHandler.writableDatabase.execSQL("INSERT INTO cart('food_name', 'group') VALUES($name, $details")
         cart.add(myTitles[pos])
         myTitles.add(myTitles[pos])
         myDetails.add(myTitles[pos] + " Details!")
         myImages.add(R.drawable.food)
+        myInstructions.add("INSTRUCTIONS")
         adapter!!.notifyDataSetChanged()
     }
 
@@ -140,10 +157,27 @@ class MainActivity : AppCompatActivity() {
         myTitles.add(selectedItem[0])
     }
 
-    fun goToDetails(view: View) {
-        current = "DetailsActivity"
+    fun goToFavorites(view: View) {
+        current = "FavoritesActivity"
 
-        val intent = Intent(this, DetailsActivity::class.java)
+        val intent = Intent(this, FavoritesActivity::class.java)
 
-        startActivity(intent)}
+        myTitles.clear()
+        myDetails.clear()
+        myImages.clear()
+        adapter!!.notifyDataSetChanged()
+        startActivity(intent);
+    }
+
+    fun goToSuggestions(view: View) {
+        current = "SuggestionsActivity"
+
+        val intent = Intent(this, SuggestionsActivity::class.java)
+
+        myTitles.clear()
+        myDetails.clear()
+        myImages.clear()
+        adapter!!.notifyDataSetChanged()
+        startActivity(intent);
+    }
 }

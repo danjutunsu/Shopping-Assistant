@@ -6,26 +6,79 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="57dp"
-        android:layout_height="58dp"
-        android:layout_marginStart="354dp"
-        android:layout_marginLeft="354dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/constraintLayout">
+    <EditText
+        android:id="@+id/name"
+        android:layout_width="181dp"
+        android:layout_height="43dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="100dp"
+        android:ems="10"
+        android:hint="Search for a recipe"
+        android:textColor="#000000"
+        android:textColorHint="#A5A5A5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></EditText>
 
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="93dp"
-            android:layout_height="83dp"
-            android:onClick="goToCart"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.48"
-            app:srcCompat="@drawable/cart" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <ImageView
+        android:id="@+id/mainBrowseButton"
+        android:layout_width="56dp"
+        android:layout_height="53dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:onClick="goToBrowse"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/list" />
+
+    <ImageView
+        android:id="@+id/mainFavoriteButton"
+        android:layout_width="41dp"
+        android:layout_height="53dp"
+        android:layout_marginStart="287dp"
+        android:layout_marginLeft="287dp"
+        android:layout_marginTop="16dp"
+        android:onClick="goToFavorites"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/heart" />
+
+    <Button
+        android:id="@+id/searchButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="229dp"
+        android:layout_marginLeft="229dp"
+        android:layout_marginTop="95dp"
+        android:onClick="lookupRecipe"
+        android:text="Find Recipe"
+        app:backgroundTint="#F29F05"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/mainCartButton"
+        android:layout_width="93dp"
+        android:layout_height="83dp"
+        android:layout_marginStart="337dp"
+        android:layout_marginLeft="337dp"
+        android:onClick="goToCart"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/cart" />
+
+    <ImageView
+        android:id="@+id/suggestionsButton"
+        android:onClick="goToSuggestions"
+        android:layout_width="54dp"
+        android:layout_height="61dp"
+        android:layout_marginStart="202dp"
+        android:layout_marginLeft="202dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/exclaim" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
@@ -38,85 +91,23 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="409dp"
-                android:layout_height="195dp"
-                android:layout_marginStart="6dp"
-                android:layout_marginLeft="6dp"
-                android:layout_marginTop="523dp"
-                android:text="BECAUSE YOU LIKED: "
-                android:textSize="36sp"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginTop="156dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="kjsdfbnsdkjfnksd" />
+                app:layout_constraintTop_toTopOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <Button
-            android:id="@+id/searchButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:onClick="lookupRecipe"
-            android:text="Find Recipe"
-            app:backgroundTint="#F29F05"
-            app:layout_constraintLeft_toRightOf="@id/name"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <EditText
-            android:id="@+id/name"
-            android:layout_width="181dp"
-            android:layout_height="43dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
-            android:ems="10"
-            android:hint="Search for a recipe"
-            android:textColorHint="#A5A5A5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"></EditText>
-
-        <Button
-            android:id="@+id/browseButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="2dp"
-            android:onClick="goToBrowse"
-            android:text="BROWSE"
-            app:backgroundTint="#F29F05"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/name" />
-
-        <Button
-            android:id="@+id/addItem"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:layout_marginEnd="88dp"
-            android:layout_marginRight="88dp"
-            android:onClick="addItem"
-            android:text="Add"
-            app:backgroundTint="#F29F05"
-            app:layout_constraintBottom_toBottomOf="@+id/browseButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/searchButton"
-            app:layout_constraintVertical_bias="1.0" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="2dp"
-            android:layout_marginLeft="2dp"
-            android:layout_marginTop="116dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.714"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
