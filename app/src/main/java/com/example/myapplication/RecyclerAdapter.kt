@@ -10,28 +10,23 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 
-
 internal lateinit var delBtn: ImageView
 internal lateinit var addBtn: ImageView
 internal lateinit var likeBtn: ImageView
 internal lateinit var likeButton: ImageView
 internal lateinit var findBtn: Button
 
-
 var myTitles = mutableListOf<String>()
 var ingredients = mutableListOf<String>()
 var myDetails = mutableListOf<String>()
 var myInstructions = mutableListOf<String>()
 var suggestions = mutableListOf<String?>()
-
 var myImages = mutableListOf<Int>()
 var position = BrowseRecyclerAdapter().getPosition()
-
 var layoutManager: RecyclerView.LayoutManager? = null
 var adapter: RecyclerView.Adapter<CustomViewHolder>? = null
 var browseAdapter: RecyclerView.Adapter<BrowseViewHolder>? = null
 var cartAdapter: RecyclerView.Adapter<CartViewHolder>? = null
-var positionInt: Int = 0
 
 class RecyclerAdapter : RecyclerView.Adapter<CustomViewHolder>() {
 
@@ -81,10 +76,8 @@ class CustomViewHolder(view: View): ViewHolder(view) {
         itemInstructions = itemView.findViewById(R.id.instructions)
         instructionsHeader = itemView.findViewById(R.id.instructionsHeader)
         cardView = itemView.findViewById(R.id.card_view)
-
         delBtn = itemView.findViewById(R.id.deleteButton)!!
         likeButton = itemView.findViewById(R.id.likeButtonMain)!!
-
         itemInstructions.visibility = GONE
         instructionsHeader.visibility = GONE
 
@@ -165,8 +158,6 @@ class BrowseViewHolder(view: View): ViewHolder(view) {
     var itemDetail: TextView
     var itemSuggestions: TextView
     var cardView: CardView
-    lateinit var itemName: String
-
 
     init {
         itemImage = itemView.findViewById(R.id.item_image)
@@ -214,11 +205,7 @@ class SuggestionsRecyclerAdapter() : RecyclerView.Adapter<SuggestionsViewHolder>
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SuggestionsViewHolder {
         val itemView = LayoutInflater.from(parent.context)
-
         val holder = SuggestionsViewHolder(itemView.inflate(R.layout.main_list_layout, parent, false))
-
-//        findButton = holder.itemView.findViewById(R.id.findRecipes)
-//        findButton.setOnClickListener(this)
 
         return holder
     }
