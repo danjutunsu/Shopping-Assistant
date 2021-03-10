@@ -89,11 +89,11 @@ class CartDBHandler(context: Context,
 
         while (cursor.moveToNext()) {
             val name = cursor.getString(0)
-            val id = cursor.getString(1)
+            val group = cursor.getString(1)
 
 
             myTitles.add(name)
-            myDetails.add(id)
+            myDetails.add(group)
             myImages.add(R.drawable.food)
             cartAdapter!!.notifyDataSetChanged()
 

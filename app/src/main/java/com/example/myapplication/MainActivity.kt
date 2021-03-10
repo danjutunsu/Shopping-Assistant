@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+import android.content.Context
 import android.content.Intent
 import android.database.sqlite.SQLiteOpenHelper
 import android.os.Bundle
@@ -41,16 +42,6 @@ class MainActivity : AppCompatActivity() {
             favoritesAdapter?.notifyDataSetChanged()
         }
         adapter!!.notifyDataSetChanged()
-    }
-
-    fun addToLiked(pos: Int) {
-        likedRecipes.add(myTitles[pos])
-        likedRecipeIngredients.add(myDetails[pos])
-        likedInstructions.add(myInstructions[pos])
-        //incorporate instructions into add event
-
-        adapter!!.notifyDataSetChanged()
-        println(likedRecipes)
     }
 
     fun lookupRecipe(view: View) {

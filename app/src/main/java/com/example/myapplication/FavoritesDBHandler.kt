@@ -54,12 +54,12 @@ class FavoritesDBHandler(context: Context,
         var name = myTitles[pos]
         val dbHandler = FavoritesDBHandler(context, null, null, 1)
         println(name)
-        dbHandler.writableDatabase.execSQL("DELETE FROM cart WHERE food_name = '$name';")
+
+        dbHandler.writableDatabase.execSQL("DELETE FROM recipes WHERE recipeName = '$name';")
 
         myTitles.removeAt(pos)
         myDetails.removeAt(pos)
         myImages.removeAt(pos)
-        cartAdapter?.notifyDataSetChanged()
     }
 
     fun addToCart(context: Context, pos: Int) {
@@ -91,14 +91,12 @@ class FavoritesDBHandler(context: Context,
             val name = cursor.getString(0)
             val id = cursor.getString(1)
 
-
             myTitles.add(name)
             myDetails.add(id)
             myImages.add(R.drawable.food)
             cartAdapter!!.notifyDataSetChanged()
 
         }
-
         cursor.close()
         db.close()
 
@@ -119,7 +117,7 @@ class FavoritesDBHandler(context: Context,
         myDetails.clear()
         myImages.clear()
         myInstructions.clear()
-        cartAdapter!!.notifyDataSetChanged()
+        favoritesAdapter!!.notifyDataSetChanged()
 
         while (cursor.moveToNext()) {
             val name = cursor.getString(0)
@@ -129,25 +127,62 @@ class FavoritesDBHandler(context: Context,
             myTitles.add(name)
             myDetails.add(id)
             myImages.add(R.drawable.food)
-            cartAdapter!!.notifyDataSetChanged()
+            favoritesAdapter!!.notifyDataSetChanged()
 
+        }
+
+        cursor.close()
+        db.close()
+        return
+    }
+    fun addToLiked(context: Context, pos: Int) {
+        var name = myTitles[pos]
+        var ingredients = myDetails[pos]
+        var instructions = myInstructions[pos]
+
+        val dbHandler = FavoritesDBHandler(context, null, null, 1)
+
+        dbHandler.writableDatabase.execSQL("INSERT INTO recipes(RecipeName, Ingredients, Directions) VALUES('$name', '$ingredients', '$instructions')")
+
+        likedRecipes.add(myTitles[pos])
+        likedRecipeIngredients.add(myDetails[pos])
+        likedInstructions.add(myInstructions[pos])
+        //incorporate instructions into add event
+
+    }
+    fun callFavorites() {
+        var db = this.writableDatabase
+
+        var cursor = db.rawQuery("SELECT * FROM ${TABLE}", null)
+
+        myTitles.clear()
+        myDetails.clear()
+        myImages.clear()
+        myInstructions.clear()
+
+        while (cursor.moveToNext()) {
+            val name = cursor.getString(0)
+            val ingredients = cursor.getString(8)
+            val instructions = cursor.getString(9)
+
+
+            myTitles.add(name)
+            myDetails.add(ingredients)
+            myInstructions.add(instructions)
+            myImages.add(R.drawable.food)
         }
 
         cursor.close()
         db.close()
 
 
-        println("CART CALLED")
-        return
     }
 
     companion object {
 
         private val DATABASE_VERSION = 1
-        internal val DATABASE_NAME = "cart.db"
-        val TABLE = "cart"
-
-        val COLUMN_NAME = "food_name"
+        internal val DATABASE_NAME = "favorites.db"
+        val TABLE = "recipes"
     }
 
 }

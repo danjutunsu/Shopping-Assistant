@@ -100,7 +100,9 @@ class CustomViewHolder(view: View): ViewHolder(view) {
 
         //add item to likedItems list
         likeButton!!.setOnClickListener {
-            MainActivity().addToLiked(adapterPosition)
+            val dbHandler = FavoritesDBHandler(view.context, null, null, 1)
+
+            dbHandler.addToLiked(view.context, adapterPosition)
         }
 
         var changed = 0
@@ -383,8 +385,6 @@ class FavoritesViewHolder(view: View): ViewHolder(view) {
         cardView = itemView.findViewById(R.id.card_view)
         itemInstructions = itemView.findViewById(R.id.instructions2)
         instructionsHeader = itemView.findViewById(R.id.instructionsHeader)
-
-
         delBtn = itemView.findViewById(R.id.deleteButton)!!
 //
         itemInstructions.visibility = GONE
@@ -415,7 +415,11 @@ class FavoritesViewHolder(view: View): ViewHolder(view) {
 
         //deletes item when x clicked
         delBtn!!.setOnClickListener {
-            MainActivity().deleteItem(adapterPosition)
+            val dbHandler = FavoritesDBHandler(view.context, null, null, 1)
+
+            dbHandler.deleteItem(view.context, adapterPosition)
+
+            favoritesAdapter!!.notifyDataSetChanged()
         }
     }
 }

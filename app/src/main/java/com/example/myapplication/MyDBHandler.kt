@@ -18,7 +18,6 @@ import kotlinx.android.synthetic.main.list_layout.*
 class MyDBHandler(context: Context?, name: String?,
                   factory: SQLiteDatabase.CursorFactory?, version: Int) : SQLiteOpenHelper(context, DATABASE_NAME, null, 2) {
 
-
     override fun onCreate(db: SQLiteDatabase) {
 //        val CREATE_RECIPES_TABLE = ("CREATE TABLE " +
 //                TABLE_recipes + "("
