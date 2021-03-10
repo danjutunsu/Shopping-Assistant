@@ -100,26 +100,18 @@ class CustomViewHolder(view: View): ViewHolder(view) {
 
         //add item to likedItems list
         likeButton!!.setOnClickListener {
-            MainActivity().addToLiked(adapterPosition)
+            val dbHandler = FavoritesDBHandler(view.context, null, null, 1)
+
+            dbHandler.addToLiked(view.context, adapterPosition)
         }
 
         var changed = 0
 
         var defaultCardColor = cardView.cardBackgroundColor.defaultColor
 
-        var selectedPos = RecyclerView.NO_POSITION
-
-        fun adapterInt() {
-            println(adapterPosition)
-        }
-
-        @Suppress("DEPRECATION")
-        view.setSelected(selectedPos == position)
-
         // sets position on click
         view.setOnClickListener {
             BrowseRecyclerAdapter().setPosition(adapterPosition)
-            selectedPos = layoutPosition
             if (changed == 0) {
                 cardView.setBackgroundColor(parseColor("#ba0000"))
                 instructionsHeader.visibility = VISIBLE
@@ -185,32 +177,14 @@ class BrowseViewHolder(view: View): ViewHolder(view) {
 
         addBtn = itemView.findViewById(R.id.addButton)!!
         findBtn = itemView.findViewById(R.id.findRecipes)
-
-
         var changed = 0
-
         var defaultCardColor = cardView.cardBackgroundColor.defaultColor
-
-        var selectedPos = RecyclerView.NO_POSITION
-
-        fun adapterInt() {
-            println(adapterPosition)
-        }
-
-        @Suppress("DEPRECATION")
-        view.setSelected(selectedPos == position)
-
 
         // sets position on click
         view.setOnClickListener {
             BrowseRecyclerAdapter().setPosition(adapterPosition)
-            thisNum = adapterPosition
-            println(thisNum)
-            selectedPos = layoutPosition
 
             BrowseActivity().changeNum(adapterPosition)
-            println(thisNum)
-            println("Adapter set to: " + adapterPosition)
             if (changed == 0) {
                 cardView.setBackgroundColor(parseColor("#ba0000"))
                 changed = 1
@@ -220,7 +194,6 @@ class BrowseViewHolder(view: View): ViewHolder(view) {
             }
         }
 
-        //add item when + clicked
         addBtn!!.setOnClickListener {
             val dbHandler = CartDBHandler(view.context, null, null, 1)
 
@@ -279,7 +252,6 @@ class SuggestionsViewHolder(view: View): ViewHolder(view) {
     var itemTitle: TextView
     var itemDetail: TextView
     var cardView: CardView
-    lateinit var itemName: String
     var itemInstructions: TextView
     var instructionsHeader: TextView
 
@@ -290,8 +262,6 @@ class SuggestionsViewHolder(view: View): ViewHolder(view) {
         cardView = itemView.findViewById(R.id.card_view)
         itemInstructions = itemView.findViewById(R.id.instructions)
         instructionsHeader = itemView.findViewById(R.id.instructionsHeader)
-
-
         delBtn = itemView.findViewById(R.id.deleteButton)!!
         likeBtn = itemView.findViewById(R.id.likeButtonMain)
 
@@ -299,14 +269,11 @@ class SuggestionsViewHolder(view: View): ViewHolder(view) {
         instructionsHeader.visibility = GONE
 
         var changed = 0
-
         var defaultCardColor = cardView.cardBackgroundColor.defaultColor
 
         // sets position on click
         view.setOnClickListener {
-
             SuggestionsRecyclerAdapter().setPosition(adapterPosition)
-
             if (changed == 0) {
                 cardView.setBackgroundColor(parseColor("#ba0000"))
                 instructionsHeader.visibility = VISIBLE
@@ -318,10 +285,8 @@ class SuggestionsViewHolder(view: View): ViewHolder(view) {
                 itemInstructions.visibility = GONE
                 changed = 0
             }
-
         }
 
-        //deletes item when x clicked
         delBtn!!.setOnClickListener {
             MainActivity().deleteItem(adapterPosition)
         }
@@ -383,23 +348,15 @@ class FavoritesViewHolder(view: View): ViewHolder(view) {
         cardView = itemView.findViewById(R.id.card_view)
         itemInstructions = itemView.findViewById(R.id.instructions2)
         instructionsHeader = itemView.findViewById(R.id.instructionsHeader)
-
-
         delBtn = itemView.findViewById(R.id.deleteButton)!!
-//
         itemInstructions.visibility = GONE
         instructionsHeader.visibility = GONE
-
         var changed = 0
-
         var defaultCardColor = cardView.cardBackgroundColor.defaultColor
-
-        var selectedPos = RecyclerView.NO_POSITION
 
         // sets position on click
         view.setOnClickListener {
             FavoritesRecyclerAdapter().setPosition(adapterPosition)
-            selectedPos = layoutPosition
             if (changed == 0) {
                 cardView.setBackgroundColor(parseColor("#ba0000"))
                 instructionsHeader.visibility = VISIBLE
@@ -413,9 +370,11 @@ class FavoritesViewHolder(view: View): ViewHolder(view) {
             }
         }
 
-        //deletes item when x clicked
         delBtn!!.setOnClickListener {
-            MainActivity().deleteItem(adapterPosition)
+            val dbHandler = FavoritesDBHandler(view.context, null, null, 1)
+
+            dbHandler.deleteItem(view.context, adapterPosition)
+            favoritesAdapter!!.notifyDataSetChanged()
         }
     }
 }
@@ -455,8 +414,7 @@ class CartViewHolder(val view: View): ViewHolder(view) {
     var itemImage: ImageView
     var itemTitle: TextView
     var itemDetail: TextView
-    lateinit var cardView: CardView
-    lateinit var itemName: String
+    var cardView: CardView
 
     init {
         itemImage = itemView.findViewById(R.id.item_image)
@@ -468,10 +426,7 @@ class CartViewHolder(val view: View): ViewHolder(view) {
         delBtn = itemView.findViewById(R.id.deleteButton)!!
         addBtn = itemView.findViewById(R.id.addButton)!!
         findBtn = itemView.findViewById(R.id.findRecipes)
-
-
         var changed = 0
-
         var defaultCardColor = cardView.cardBackgroundColor.defaultColor
 
         // sets position on click
@@ -486,11 +441,11 @@ class CartViewHolder(val view: View): ViewHolder(view) {
             }
         }
 
-        //deletes item when x clicked
-
         delBtn!!.setOnClickListener {
             val dbHandler = CartDBHandler(view.context, null, null, 1)
             dbHandler.deleteItem(view.context, adapterPosition)
+
+            cartAdapter!!.notifyDataSetChanged()
         }
 
         findBtn!!.setOnClickListener {

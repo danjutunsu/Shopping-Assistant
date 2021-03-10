@@ -40,8 +40,10 @@ class FavoritesActivity: AppCompatActivity() {
         favoritesRecyclerView.adapter = favoritesAdapter
 
         supportActionBar?.title = "Favorite Recipes"
+        val dbHandler = FavoritesDBHandler(this, null, null, 1)
 
-        callFavorites()
+        dbHandler.callFavorites()
+        favoritesAdapter!!.notifyDataSetChanged()
     }
 
     private fun callFavorites() {
