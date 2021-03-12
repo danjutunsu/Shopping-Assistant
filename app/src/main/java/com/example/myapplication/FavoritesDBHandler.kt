@@ -51,7 +51,7 @@ class FavoritesDBHandler(context: Context,
     }
 
     fun deleteItem(context: Context, pos: Int) {
-        var name = myTitles[pos]
+        var name = myTitles[pos].replace("'", "''")
         val dbHandler = FavoritesDBHandler(context, null, null, 1)
         println(name)
 

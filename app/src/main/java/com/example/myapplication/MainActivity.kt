@@ -71,6 +71,9 @@ class MainActivity : AppCompatActivity() {
             myImages.add(R.drawable.food)
             adapter!!.notifyDataSetChanged()
 
+            val dbHandler = HistoryDBHandler(view.context, null, null, 1)
+            dbHandler.addToQuery(view.context, textField)
+
             //Toast
             val text = "Searching..."
             val duration = Toast.LENGTH_SHORT
@@ -78,6 +81,9 @@ class MainActivity : AppCompatActivity() {
             toast.show()
         }
         else {
+            val dbHandler = HistoryDBHandler(view.context, null, null, 1)
+            dbHandler.addToQuery(view.context, textField)
+
             val text = "Not Match Found"
             val duration = Toast.LENGTH_SHORT
             val toast = Toast.makeText(applicationContext, text, duration)
@@ -173,5 +179,11 @@ class MainActivity : AppCompatActivity() {
         myImages.clear()
         adapter!!.notifyDataSetChanged()
         startActivity(intent);
+    }
+
+    fun clearSearches(view: View) {
+            val dbHandler = HistoryDBHandler(view.context, null, null, 1)
+
+            dbHandler.clearSearches(view.context)
     }
 }

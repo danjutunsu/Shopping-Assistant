@@ -38,6 +38,9 @@ class CartDBHandler(context: Context,
             recipe.instructions?.let { myInstructions.add(it) }
             myImages.add(R.drawable.food)
 
+            val HistdbHandler = HistoryDBHandler(context, null, null, 1)
+            HistdbHandler.addToQuery(context, name)
+
             //Toast
             val text = "Searching..."
             val duration = Toast.LENGTH_SHORT
@@ -117,27 +120,14 @@ class CartDBHandler(context: Context,
 
         var cursor = db.rawQuery("SELECT * FROM ${TABLE}", null)
 
-        myTitles.clear()
-        myDetails.clear()
-        myImages.clear()
-        myInstructions.clear()
-        cartAdapter!!.notifyDataSetChanged()
-
         while (cursor.moveToNext()) {
             val name = cursor.getString(0)
-            val id = cursor.getString(1)
 
-
-            myTitles.add(name)
-            myDetails.add(id)
-            myImages.add(R.drawable.food)
-            cartAdapter!!.notifyDataSetChanged()
-
+            cart.add(name)
         }
 
         cursor.close()
         db.close()
-
 
         println("CART CALLED")
         return

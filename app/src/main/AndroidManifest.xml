@@ -30,6 +30,9 @@
         <activity android:name=".SuggestionsActivity"
             android:windowSoftInputMode="adjustNothing">
         </activity>
+        <activity android:name=".SettingsActivity"
+            android:windowSoftInputMode="adjustNothing">
+        </activity>
     </application>
 
 </manifest>
