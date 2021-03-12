@@ -19,23 +19,12 @@
         android:padding="11dp">
 
         <ImageView
-            android:id="@+id/addButton"
-            android:layout_width="42dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="328dp"
-            android:layout_marginLeft="328dp"
-            android:layout_marginTop="4dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/plus" />
-
-        <ImageView
             android:id="@+id/deleteButton"
             android:layout_width="38dp"
             android:layout_height="36dp"
-            android:layout_marginStart="332dp"
-            android:layout_marginLeft="332dp"
-            android:layout_marginTop="124dp"
+            android:layout_marginStart="328dp"
+            android:layout_marginLeft="328dp"
+            android:layout_marginTop="116dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/delete" />
@@ -71,11 +60,13 @@
             android:id="@+id/instructions"
             android:layout_width="242dp"
             android:layout_height="27dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="48dp"
             android:layout_marginRight="48dp"
             android:layout_marginBottom="56dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"></TextView>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/item_detail"></TextView>
 
         <TextView
             android:id="@+id/suggestion"
@@ -95,10 +86,12 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="164dp"
             android:layout_marginLeft="164dp"
+            android:layout_marginTop="8dp"
             android:text="FIND RECIPES"
             app:backgroundTint="#db3a34"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/instructions" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -97,4 +97,15 @@ class FavoritesActivity: AppCompatActivity() {
         val intent = Intent(this, CartActivity::class.java)
         startActivity(intent);
     }
+
+    fun goToSuggestions(view: View) {
+        current = "SuggestionsActivity"
+
+        val intent = Intent(this, SuggestionsActivity::class.java)
+
+        myTitles.clear()
+        myDetails.clear()
+        myImages.clear()
+        adapter!!.notifyDataSetChanged()
+        startActivity(intent);}
 }

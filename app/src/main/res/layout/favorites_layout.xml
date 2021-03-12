@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
     android:onClick="openCard"
-    app:cardBackgroundColor="#C9BA0000"
+    app:cardBackgroundColor="#084C61"
     app:cardCornerRadius="12dp"
     app:cardElevation="3dp"
     app:contentPadding="4dp">

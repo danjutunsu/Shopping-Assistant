@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF">
+    android:background="#177E89">
 
     <EditText
         android:id="@+id/name"
@@ -53,7 +53,8 @@
         android:layout_marginTop="95dp"
         android:onClick="lookupRecipe"
         android:text="Find Recipe"
-        app:backgroundTint="#F29F05"
+        android:textColor="#FFFFFF"
+        app:backgroundTint="#DB3A34"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -70,12 +71,12 @@
 
     <ImageView
         android:id="@+id/suggestionsButton"
-        android:onClick="goToSuggestions"
         android:layout_width="54dp"
         android:layout_height="61dp"
         android:layout_marginStart="202dp"
         android:layout_marginLeft="202dp"
         android:layout_marginTop="12dp"
+        android:onClick="goToSuggestions"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/exclaim" />

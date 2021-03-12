@@ -63,8 +63,8 @@ class FavoritesDBHandler(context: Context,
     }
 
     fun addToCart(context: Context, pos: Int) {
-        var name = myTitles[pos]
-        var details = myDetails[pos]
+        var name = myTitles[pos].replace("'", "''")
+        var details = myDetails[pos].replace("'", "''")
         val dbHandler = FavoritesDBHandler(context, null, null, 1)
 
         dbHandler.writableDatabase.execSQL("INSERT INTO cart('food_name', 'group') VALUES('$name', '$details');")
@@ -136,9 +136,9 @@ class FavoritesDBHandler(context: Context,
         return
     }
     fun addToLiked(context: Context, pos: Int) {
-        var name = myTitles[pos]
-        var ingredients = myDetails[pos]
-        var instructions = myInstructions[pos]
+        var name = myTitles[pos].replace("'", "''")
+        var ingredients = myDetails[pos].replace("'", "''")
+        var instructions = myInstructions[pos].replace("'", "''")
 
         val dbHandler = FavoritesDBHandler(context, null, null, 1)
 

@@ -193,7 +193,6 @@ class MyDBHandler(context: Context?, name: String?,
             val instructions = cursor.getString(9).replace("**", "\n\n")
             recipe = Recipe(id, name, ingredients, instructions)
 
-
             myTitles.add(name)
             myDetails.add(ingredients)
             myInstructions.add(instructions)

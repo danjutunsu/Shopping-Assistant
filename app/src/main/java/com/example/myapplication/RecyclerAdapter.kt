@@ -1,11 +1,15 @@
 package com.example.myapplication
 
-import android.graphics.Color.*
+import android.content.Intent
+import android.graphics.Color.parseColor
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.*
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
@@ -36,6 +40,10 @@ class RecyclerAdapter : RecyclerView.Adapter<CustomViewHolder>() {
         val holder = CustomViewHolder(itemView.inflate(R.layout.main_list_layout, parent, false))
 
         return holder
+    }
+
+    override fun setHasStableIds(hasStableIds: Boolean) {
+        super.setHasStableIds(hasStableIds)
     }
 
     override fun getItemCount(): Int {
@@ -129,6 +137,10 @@ class BrowseRecyclerAdapter() : RecyclerView.Adapter<BrowseViewHolder>() {
         return holder
     }
 
+    override fun setHasStableIds(hasStableIds: Boolean) {
+        super.setHasStableIds(hasStableIds)
+    }
+
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
     }
@@ -167,7 +179,7 @@ class BrowseViewHolder(view: View): ViewHolder(view) {
         cardView = itemView.findViewById(R.id.card_view)
 
         addBtn = itemView.findViewById(R.id.addButton)!!
-        findBtn = itemView.findViewById(R.id.findRecipes)
+        findBtn = itemView.findViewById(R.id.findRecipes)!!
         var changed = 0
         var defaultCardColor = cardView.cardBackgroundColor.defaultColor
 
@@ -192,8 +204,10 @@ class BrowseViewHolder(view: View): ViewHolder(view) {
         }
 
         findBtn!!.setOnClickListener {
-            val dbHandler = MyDBHandler(view.context, null, null, 1)
+            val intent = Intent(view.context, MainActivity::class.java)
+            view.context.startActivity(intent)
 
+            val dbHandler = MyDBHandler(view.context, null, null, 1)
             dbHandler.lookupRecipe(view.context, adapterPosition)
             browseAdapter!!.notifyDataSetChanged()
         }
@@ -277,6 +291,12 @@ class SuggestionsViewHolder(view: View): ViewHolder(view) {
         delBtn!!.setOnClickListener {
             MainActivity().deleteItem(adapterPosition)
         }
+
+        likeBtn!!.setOnClickListener {
+            val dbHandler = FavoritesDBHandler(view.context, null, null, 1)
+
+            dbHandler.addToLiked(view.context, adapterPosition)
+        }
     }
 }
 
@@ -323,7 +343,6 @@ class FavoritesViewHolder(view: View): ViewHolder(view) {
     var itemTitle: TextView
     var itemDetail: TextView
     var cardView: CardView
-    lateinit var itemName: String
     var itemInstructions: TextView
     var instructionsHeader: TextView
 
@@ -371,7 +390,7 @@ class CartRecyclerAdapter : RecyclerView.Adapter<CartViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartViewHolder {
         val itemView = LayoutInflater.from(parent.context)
 
-        val holder = CartViewHolder(itemView.inflate(R.layout.list_layout, parent, false))
+        val holder = CartViewHolder(itemView.inflate(R.layout.cart_layout, parent, false))
 
         return holder
     }
@@ -408,11 +427,10 @@ class CartViewHolder(val view: View): ViewHolder(view) {
         itemTitle = itemView.findViewById(R.id.item_title)
         itemDetail = itemView.findViewById(R.id.item_detail)
         cardView = itemView.findViewById(R.id.card_view)
-
-
         delBtn = itemView.findViewById(R.id.deleteButton)!!
-        addBtn = itemView.findViewById(R.id.addButton)!!
         findBtn = itemView.findViewById(R.id.findRecipes)
+
+
         var changed = 0
         var defaultCardColor = cardView.cardBackgroundColor.defaultColor
 
@@ -436,6 +454,9 @@ class CartViewHolder(val view: View): ViewHolder(view) {
         }
 
         findBtn!!.setOnClickListener {
+            val intent = Intent(view.context, MainActivity::class.java)
+            view.context.startActivity(intent)
+
             val dbHandler = CartDBHandler(view.context, null, null, 1)
 
             dbHandler.lookupRecipe(view.context, adapterPosition)
