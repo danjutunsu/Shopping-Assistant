@@ -32,7 +32,16 @@ class SuggestionsActivity : AppCompatActivity() {
         suggestionsRecyclerView.adapter = suggestionsAdapter
         supportActionBar?.title = "Suggestions"
 
+
+//        return myTitles[position]
+        val cartHandler = CartDBHandler(this, null, null, 1)
+        cartHandler.buildCart()
+
         for (element in cart) {
+            searchSuggestions(element)
+        }
+
+        for (element in searchedRecipes) {
             searchSuggestions(element)
         }
 //        for (element in cart)
@@ -44,6 +53,12 @@ class SuggestionsActivity : AppCompatActivity() {
 //                    println("garlic not in " + myDetails[i] + "[" + i + "]")
 //                }
 //            }
+    }
+
+    private fun searchHistory(view: View) {
+        val dbHandler = HistoryDBHandler(view.context, null, null, 1)
+
+        dbHandler.searchDB(view.context)
     }
 
     fun searchSuggestions(input: String) {

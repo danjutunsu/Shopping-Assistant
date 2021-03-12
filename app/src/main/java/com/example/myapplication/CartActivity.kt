@@ -35,20 +35,6 @@ class CartActivity : AppCompatActivity() {
 
         dbHandler.callCart()
     }
-    fun callCart(recipeName: String): Recipe?
-    {
-        val dbHandler = CartDBHandler(this, null, null, 1)
-
-
-
-//        for (element in cart) {
-//            myTitles.add(element)
-//            myDetails.add(element + " Details!")
-//            myImages.add(R.drawable.food)
-//            cartAdapter!!.notifyDataSetChanged()
-//        }
-        return null
-    }
 
     fun goHome(view: View) {
         current = "MainActivity"
@@ -111,7 +97,7 @@ class CartActivity : AppCompatActivity() {
         myTitles.clear()
         myDetails.clear()
         myImages.clear()
-        adapter!!.notifyDataSetChanged()
+        browseAdapter!!.notifyDataSetChanged()
         startActivity(intent);
     }
 
@@ -123,7 +109,7 @@ class CartActivity : AppCompatActivity() {
         myTitles.clear()
         myDetails.clear()
         myImages.clear()
-        adapter!!.notifyDataSetChanged()
+        suggestionsAdapter!!.notifyDataSetChanged()
         startActivity(intent);
     }
 }

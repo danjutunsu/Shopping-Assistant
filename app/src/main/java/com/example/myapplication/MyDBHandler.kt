@@ -19,12 +19,6 @@ class MyDBHandler(context: Context?, name: String?,
                   factory: SQLiteDatabase.CursorFactory?, version: Int) : SQLiteOpenHelper(context, DATABASE_NAME, null, 2) {
 
     override fun onCreate(db: SQLiteDatabase) {
-//        val CREATE_RECIPES_TABLE = ("CREATE TABLE " +
-//                TABLE_recipes + "("
-//                + COLUMN_ID + " INTEGER PRIMARY KEY," +
-//                COLUMN_NAME
-//                + " TEXT," + ")")
-//        db.execSQL(CREATE_RECIPES_TABLE)
     }
 
     fun findSuggestion(suggestion: String): String? {
@@ -75,6 +69,9 @@ class MyDBHandler(context: Context?, name: String?,
 
         var recipe = dbHandler.findRecipeBrowse(context, name)
 
+        val HistdbHandler = HistoryDBHandler(context, null, null, 1)
+        HistdbHandler.addToQuery(context, name)
+
         if (recipe != null) {
             println("RECIPE FOUND. Name is: " + recipe.recipeName + ". ID is: " + recipe.id)
             println("Ingredients are: " + recipe.ingredients)
@@ -110,17 +107,6 @@ class MyDBHandler(context: Context?, name: String?,
 
         var recipe: Recipe? = null
 
-//        if (cursor.moveToFirst()) {
-//            cursor.moveToFirst()
-//
-//            val name = cursor.getString(0)
-//            val id = cursor.getInt(1)
-//            val ingredients = cursor.getString(8)
-//            recipe = Recipe(id, name, ingredients)
-//            cursor.close()
-//        }
-
-
         myTitles.clear()
         myDetails.clear()
         myImages.clear()
@@ -143,17 +129,6 @@ class MyDBHandler(context: Context?, name: String?,
 
         }
 
-
-//        val c = cursor
-//        var buffer = StringBuffer()
-//        val name = cursor.getString(0)
-//        val id = cursor.getInt(1)
-//        val ingredients = cursor!!.getString(8)
-//        recipe = Recipe(id, name, ingredients)
-//
-//        while (cursor.moveToNext()) {
-//            buffer.append(" " + name)
-//        }
         cursor.close()
         db.close()
 
@@ -169,17 +144,6 @@ class MyDBHandler(context: Context?, name: String?,
         var cursor = db.rawQuery(query, null)
 
         var recipe: Recipe? = null
-
-//        if (cursor.moveToFirst()) {
-//            cursor.moveToFirst()
-//
-//            val name = cursor.getString(0)
-//            val id = cursor.getInt(1)
-//            val ingredients = cursor.getString(8)
-//            recipe = Recipe(id, name, ingredients)
-//            cursor.close()
-//        }
-
 
         myTitles.clear()
         myDetails.clear()
@@ -199,17 +163,6 @@ class MyDBHandler(context: Context?, name: String?,
             myImages.add(R.drawable.food)
         }
 
-
-//        val c = cursor
-//        var buffer = StringBuffer()
-//        val name = cursor.getString(0)
-//        val id = cursor.getInt(1)
-//        val ingredients = cursor!!.getString(8)
-//        recipe = Recipe(id, name, ingredients)
-//
-//        while (cursor.moveToNext()) {
-//            buffer.append(" " + name)
-//        }
         cursor.close()
         db.close()
 
