@@ -28,8 +28,6 @@ fun increaseNum(view: View, add: Int) {
 
 class BrowseActivity : AppCompatActivity() {
 
-    var isFragmentOneLoaded = true
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_browse)
