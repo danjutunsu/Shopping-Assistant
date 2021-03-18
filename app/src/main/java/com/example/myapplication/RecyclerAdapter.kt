@@ -13,12 +13,15 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import kotlinx.android.synthetic.main.activity_stats.*
+import org.w3c.dom.Text
 
 internal lateinit var delBtn: ImageView
 internal lateinit var addBtn: ImageView
 internal lateinit var likeBtn: ImageView
 internal lateinit var likeButton: ImageView
 internal lateinit var findBtn: Button
+internal lateinit var statsBtn: Button
 
 var myTitles = mutableListOf<String>()
 var ingredients = mutableListOf<String>()
@@ -114,7 +117,7 @@ class CustomViewHolder(view: View): ViewHolder(view) {
         view.setOnClickListener {
             BrowseRecyclerAdapter().setPosition(adapterPosition)
             if (changed == 0) {
-                cardView.setBackgroundColor(parseColor("#ba0000"))
+                cardView.setBackgroundColor(parseColor("#053A4A"))
                 instructionsHeader.visibility = VISIBLE
                 itemInstructions.visibility = VISIBLE
                 changed = 1
@@ -189,7 +192,7 @@ class BrowseViewHolder(view: View): ViewHolder(view) {
 
             BrowseActivity().changeNum(adapterPosition)
             if (changed == 0) {
-                cardView.setBackgroundColor(parseColor("#ba0000"))
+                cardView.setBackgroundColor(parseColor("#053A4A"))
                 changed = 1
             } else if (changed == 1) {
                 cardView.setBackgroundColor(defaultCardColor)
@@ -276,7 +279,7 @@ class SuggestionsViewHolder(view: View): ViewHolder(view) {
         view.setOnClickListener {
             SuggestionsRecyclerAdapter().setPosition(adapterPosition)
             if (changed == 0) {
-                cardView.setBackgroundColor(parseColor("#ba0000"))
+                cardView.setBackgroundColor(parseColor("#053A4A"))
                 instructionsHeader.visibility = VISIBLE
                 itemInstructions.visibility = VISIBLE
                 changed = 1
@@ -364,7 +367,7 @@ class FavoritesViewHolder(view: View): ViewHolder(view) {
         view.setOnClickListener {
             FavoritesRecyclerAdapter().setPosition(adapterPosition)
             if (changed == 0) {
-                cardView.setBackgroundColor(parseColor("#ba0000"))
+                cardView.setBackgroundColor(parseColor("#053A4A"))
                 instructionsHeader.visibility = VISIBLE
                 itemInstructions.visibility = VISIBLE
                 changed = 1
@@ -429,6 +432,7 @@ class CartViewHolder(val view: View): ViewHolder(view) {
         cardView = itemView.findViewById(R.id.card_view)
         delBtn = itemView.findViewById(R.id.deleteButton)!!
         findBtn = itemView.findViewById(R.id.findRecipes)
+        statsBtn = itemView.findViewById(R.id.common)
 
 
         var changed = 0
@@ -438,7 +442,7 @@ class CartViewHolder(val view: View): ViewHolder(view) {
         view.setOnClickListener {
             CartRecyclerAdapter().setPosition(adapterPosition)
             if (changed == 0) {
-                cardView.setBackgroundColor(parseColor("#ba0000"))
+                cardView.setBackgroundColor(parseColor("#053A4A"))
                 changed = 1
             } else if (changed == 1) {
                 cardView.setBackgroundColor(defaultCardColor)
@@ -461,6 +465,16 @@ class CartViewHolder(val view: View): ViewHolder(view) {
 
             dbHandler.lookupRecipe(view.context, adapterPosition)
             cartAdapter!!.notifyDataSetChanged()
+        }
+
+        statsBtn!!.setOnClickListener {
+            current = "StatsActivity"
+
+            StatsActivity().textView.text = "GAHLIC"
+
+            val intent = Intent(view.context, StatsActivity::class.java)
+            view.context.startActivity(intent)
+
         }
     }
 }

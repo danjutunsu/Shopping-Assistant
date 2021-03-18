@@ -162,8 +162,8 @@ class FavoritesDBHandler(context: Context,
 
         while (cursor.moveToNext()) {
             val name = cursor.getString(0)
-            val ingredients = cursor.getString(8)
-            val instructions = cursor.getString(9)
+            val ingredients = cursor.getString(6)
+            val instructions = cursor.getString(7)
 
 
             myTitles.add(name)

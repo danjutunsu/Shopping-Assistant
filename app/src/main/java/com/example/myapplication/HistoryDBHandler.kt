@@ -23,6 +23,23 @@ class HistoryDBHandler(context: Context,
 
     }
 
+    fun buildHistory() {
+        var db = this.writableDatabase
+
+        var cursor = db.rawQuery("SELECT * FROM ${TABLE}", null)
+
+        while (cursor.moveToNext()) {
+            val name = cursor.getString(0)
+
+            searchedRecipes.add(name)
+        }
+
+        cursor.close()
+        db.close()
+
+        return
+    }
+
     fun addToQuery(context: Context, input: String) {
 
         val dbHandler = HistoryDBHandler(context, null, null, 1)

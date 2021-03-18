@@ -6,6 +6,20 @@
     android:layout_height="match_parent"
     android:background="#177E89">
 
+    <Button
+        android:id="@+id/buyItems"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="256dp"
+        android:layout_marginLeft="256dp"
+        android:layout_marginTop="148dp"
+        android:onClick="buyItems"
+        android:text="Buy Items"
+        android:textColor="#FFFFFF"
+        app:backgroundTint="#DB3A34"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
         android:id="@+id/suggestionsButton3"
         android:onClick="goToSuggestions"

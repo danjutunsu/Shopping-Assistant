@@ -15,8 +15,10 @@ import kotlinx.android.synthetic.main.activity_suggestions.*
 import kotlinx.android.synthetic.main.list_layout.*
 import kotlinx.android.synthetic.main.list_layout.item_detail
 import kotlinx.android.synthetic.main.main_list_layout.*
+import kotlin.random.Random
 
 var suggestionsAdapter: RecyclerView.Adapter<SuggestionsViewHolder>? = null
+var commonItems = mutableListOf<String>()
 
 
 class SuggestionsActivity : AppCompatActivity() {
@@ -32,27 +34,35 @@ class SuggestionsActivity : AppCompatActivity() {
         suggestionsRecyclerView.adapter = suggestionsAdapter
         supportActionBar?.title = "Suggestions"
 
+        cart.clear()
 
-//        return myTitles[position]
+        searchedRecipes.clear()
+
         val cartHandler = CartDBHandler(this, null, null, 1)
         cartHandler.buildCart()
+
+
+        val historyHandler = HistoryDBHandler(this, null, null, 1)
+        historyHandler.buildHistory()
+
+        myTitles.clear()
+        myDetails.clear()
+        myImages.clear()
+        myInstructions.clear()
+
+        suggestionsAdapter!!.notifyDataSetChanged();
 
         for (element in cart) {
             searchSuggestions(element)
         }
 
-        for (element in searchedRecipes) {
-            searchSuggestions(element)
+        if (searchedRecipes.size > 0) {
+            searchSuggestions(searchedRecipes[Random.nextInt(searchedRecipes.size)])
         }
-//        for (element in cart)
-//            for (i in myDetails.indices) {
-//                println(myDetails[i])
-//                if ("garlic" in myDetails[i]) {
-//                    println("garlic in " + myDetails[i] + "[" + i + "]")
-//                } else {
-//                    println("garlic not in " + myDetails[i] + "[" + i + "]")
-//                }
-//            }
+
+        for (element in cart) {
+            MyDBHandler(this, null, null, 1).findOccurrences(element)
+        }
     }
 
     private fun searchHistory(view: View) {
@@ -62,7 +72,7 @@ class SuggestionsActivity : AppCompatActivity() {
     }
 
     fun searchSuggestions(input: String) {
-        MyDBHandler(this, null,null,1).findRecipe(input)
+        MyDBHandler(this, null,null,1).findRecipeSuggestions(this, input)
     }
 
     fun getSuggestion(s: String): String? {

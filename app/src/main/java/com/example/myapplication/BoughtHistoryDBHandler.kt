@@ -11,10 +11,11 @@ import androidx.core.content.ContextCompat.startActivity
 import kotlinx.android.synthetic.main.cart_layout.*
 import kotlinx.android.synthetic.main.list_layout.*
 
+var buyHistory = mutableListOf<String>()
 
-class CartDBHandler(context: Context,
-                    name: String?, factory: SQLiteDatabase.CursorFactory?,
-                    version: Int) : SQLiteOpenHelper(context, DATABASE_NAME, null, 2) {
+class BoughtHistoryDBHandler(context: Context,
+                             name: String?, factory: SQLiteDatabase.CursorFactory?,
+                             version: Int) : SQLiteOpenHelper(context, DATABASE_NAME, null, 2) {
 
 
     override fun onCreate(db: SQLiteDatabase) {
@@ -58,7 +59,7 @@ class CartDBHandler(context: Context,
 
     fun deleteItem(context: Context, pos: Int) {
         var name = myTitles[pos]
-        val dbHandler = CartDBHandler(context, null, null, 1)
+        val dbHandler = BoughtHistoryDBHandler(context, null, null, 1)
         println(name)
         dbHandler.writableDatabase.execSQL("DELETE FROM cart WHERE food_name = '$name';")
 
@@ -68,18 +69,39 @@ class CartDBHandler(context: Context,
         cartAdapter?.notifyDataSetChanged()
     }
 
-    fun addToCart(context: Context, pos: Int) {
-        var name = myTitles[pos]
-        var details = myDetails[pos]
-        val dbHandler = CartDBHandler(context, null, null, 1)
+    fun addToHistory(context: Context) {
 
-        dbHandler.writableDatabase.execSQL("INSERT INTO cart('food_name', 'group') VALUES('$name', '$details');")
-        cart.add(myTitles[pos])
-        myTitles.add(myTitles[pos])
-        myDetails.add(myTitles[pos] + " Details!")
-        myImages.add(R.drawable.food)
-        myInstructions.add("INSTRUCTIONS")
-        adapter!!.notifyDataSetChanged()
+        val dbHandler = BoughtHistoryDBHandler(context, null, null, 1)
+        var db = this.writableDatabase
+
+
+        commonItems.clear()
+
+        cart.clear()
+
+        val cartDbHandler = CartDBHandler(context, null, null, 1)
+
+        cartDbHandler.callCart()
+        cartDbHandler.buildCart()
+
+        var cursor = db.rawQuery("SELECT * FROM ${TABLE}", null)
+        for (element in cart) {
+            commonItems.add(element)
+            println(commonItems)
+        }
+        println(commonItems)
+
+        cartDbHandler.callCart()
+        cartDbHandler.buildCart()
+
+        if (cart.size > 0) {
+            dbHandler.writableDatabase.execSQL("INSERT INTO history('item') VALUES('$commonItems')")
+        }
+        while (cursor.moveToNext()) {
+            val query = cursor.getString(0)
+
+            println(query)
+        }
     }
 
     fun callCart() {
@@ -137,10 +159,10 @@ class CartDBHandler(context: Context,
     companion object {
 
         private val DATABASE_VERSION = 1
-        internal val DATABASE_NAME = "cart.db"
-        val TABLE = "cart"
+        internal val DATABASE_NAME = "buyHistory.db"
+        val TABLE = "history"
 
-        val COLUMN_NAME = "food_name"
+        val COLUMN_NAME = "item"
     }
 
 }

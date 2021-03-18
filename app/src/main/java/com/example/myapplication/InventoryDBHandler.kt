@@ -48,7 +48,7 @@ class InventoryDBHandler(context: Context,
 
         db.rawQuery(ingredients, null).use {
             if (it.moveToFirst()) {
-                val result = it.getString(8)
+                val result = it.getString(6)
                 return result
             }
         }
@@ -62,7 +62,7 @@ class InventoryDBHandler(context: Context,
 
         db.rawQuery(instructions, null).use {
             if (it.moveToFirst()) {
-                val result = it.getString(9)
+                val result = it.getString(7)
                 return result
             }
         }
@@ -107,8 +107,8 @@ class InventoryDBHandler(context: Context,
         while (cursor.moveToNext()) {
             val name = cursor.getString(0)
             val id = cursor.getInt(1)
-            val ingredients = cursor.getString(8).replace("**", "\n")
-            val instructions = cursor.getString(9).replace("**", "\n\n")
+            val ingredients = cursor.getString(6).replace("**", "\n")
+            val instructions = cursor.getString(7).replace("**", "\n\n")
             recipe = Recipe(id, name, ingredients, instructions)
 
 
@@ -124,7 +124,7 @@ class InventoryDBHandler(context: Context,
 //        var buffer = StringBuffer()
 //        val name = cursor.getString(0)
 //        val id = cursor.getInt(1)
-//        val ingredients = cursor!!.getString(8)
+//        val ingredients = cursor!!.getString(6)
 //        recipe = Recipe(id, name, ingredients)
 //
 //        while (cursor.moveToNext()) {
@@ -153,7 +153,7 @@ class InventoryDBHandler(context: Context,
 //
 //            val name = cursor.getString(0)
 //            val id = cursor.getInt(1)
-//            val ingredients = cursor.getString(8)
+//            val ingredients = cursor.getString(6)
 //            recipe = Recipe(id, name, ingredients)
 //            cursor.close()
 //        }
@@ -168,8 +168,8 @@ class InventoryDBHandler(context: Context,
         while (cursor.moveToNext()) {
             val name = cursor.getString(0)
             val id = cursor.getInt(1)
-            val ingredients = cursor.getString(8).replace("**", "\n")
-            val instructions = cursor.getString(9).replace("**", "\n\n")
+            val ingredients = cursor.getString(6).replace("**", "\n")
+            val instructions = cursor.getString(7).replace("**", "\n\n")
             recipe = Recipe(id, name, ingredients, instructions)
 
 

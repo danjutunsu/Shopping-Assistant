@@ -30,7 +30,7 @@
         <activity android:name=".SuggestionsActivity"
             android:windowSoftInputMode="adjustNothing">
         </activity>
-        <activity android:name=".SettingsActivity"
+        <activity android:name=".StatsActivity"
             android:windowSoftInputMode="adjustNothing">
         </activity>
     </application>

@@ -15,28 +15,13 @@ import kotlinx.android.synthetic.main.activity_browse.*
 import kotlinx.android.synthetic.main.activity_cart.cartRecyclerView
 import kotlinx.android.synthetic.main.list_layout.*
 
-var cart = mutableListOf<String>()
-var selectedItem = mutableListOf<String>()
 
-class CartActivity : AppCompatActivity() {
+class StatsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_cart)
+        setContentView(R.layout.activity_stats)
 
-        layoutManager = LinearLayoutManager(this)
-        cartRecyclerView.layoutManager = layoutManager
-
-        cartAdapter = CartRecyclerAdapter()
-        cartRecyclerView.adapter = cartAdapter
-
-        supportActionBar?.title = "Shopping Cart"
-
-        cart.clear()
-
-        val dbHandler = CartDBHandler(this, null, null, 1)
-
-        dbHandler.callCart()
-        dbHandler.buildCart()
+        supportActionBar?.title = "Stats"
     }
 
     fun goHome(view: View) {
@@ -117,9 +102,6 @@ class CartActivity : AppCompatActivity() {
     fun buyItems(view: View) {
         if (cart.size > 0) {
             BoughtHistoryDBHandler(this,null,null,1).addToHistory(view.context)
-            myTitles.clear()
-            myDetails.clear()
-            myImages.clear()
         }
     }
 }

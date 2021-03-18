@@ -42,7 +42,7 @@ class MyDBHandler(context: Context?, name: String?,
 
         db.rawQuery(ingredients, null).use {
             if (it.moveToFirst()) {
-                val result = it.getString(8)
+                val result = it.getString(6)
                 return result
             }
         }
@@ -56,7 +56,7 @@ class MyDBHandler(context: Context?, name: String?,
 
         db.rawQuery(instructions, null).use {
             if (it.moveToFirst()) {
-                val result = it.getString(9)
+                val result = it.getString(7)
                 return result
             }
         }
@@ -116,8 +116,8 @@ class MyDBHandler(context: Context?, name: String?,
         while (cursor.moveToNext()) {
             val name = cursor.getString(0)
             val id = cursor.getInt(1)
-            val ingredients = cursor.getString(8).replace("**", "\n")
-            val instructions = cursor.getString(9).replace("**", "\n\n")
+            val ingredients = cursor.getString(6).replace("**", "\n")
+            val instructions = cursor.getString(7).replace("**", "\n\n")
             recipe = Recipe(id, name, ingredients, instructions)
 
 
@@ -153,8 +153,8 @@ class MyDBHandler(context: Context?, name: String?,
         while (cursor.moveToNext()) {
             val name = cursor.getString(0)
             val id = cursor.getInt(1)
-            val ingredients = cursor.getString(8).replace("**", "\n")
-            val instructions = cursor.getString(9).replace("**", "\n\n")
+            val ingredients = cursor.getString(6).replace("**", "\n")
+            val instructions = cursor.getString(7).replace("**", "\n\n")
             recipe = Recipe(id, name, ingredients, instructions)
 
             myTitles.add(name)
@@ -167,6 +167,59 @@ class MyDBHandler(context: Context?, name: String?,
         db.close()
 
         return recipe
+    }
+
+    fun findRecipeSuggestions(context: Context, recipeName: String): Recipe? {
+        var db = this.writableDatabase
+
+        val query =
+            "SELECT * FROM $TABLE_recipes WHERE $INGREDIENTS LIKE  \"%$recipeName%\""
+
+        var cursor = db.rawQuery(query, null)
+
+        var recipe: Recipe? = null
+
+        var i = 0
+        var max = 5
+        while (cursor.moveToNext()) { // Allows for a maximum search result of 'max'
+            val name = cursor.getString(0)
+            val id = cursor.getInt(1)
+            val ingredients = cursor.getString(6).replace("**", "\n")
+            val instructions = cursor.getString(7).replace("**", "\n\n")
+            recipe = Recipe(id, name, ingredients, instructions)
+
+            myTitles.add(name)
+            myDetails.add(ingredients)
+            myInstructions.add(instructions)
+            myImages.add(R.drawable.food)
+
+            i++
+            if (i == max) {
+                break
+            }
+        }
+
+        cursor.close()
+        db.close()
+
+        return recipe
+    }
+
+    fun findOccurrences(input: String) {
+        var db = this.writableDatabase
+
+        val query =
+            "SELECT * FROM $TABLE_recipes WHERE $INGREDIENTS LIKE \"%$input%\""
+
+        var cursor = db.rawQuery(query, null)
+
+        var i = 0
+        while (cursor.moveToNext()) { // Allows for a maximum search result of 'max'
+//            println("ingredients: " + cursor.getString(6))
+        }
+
+        cursor.close()
+        db.close()
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int,
