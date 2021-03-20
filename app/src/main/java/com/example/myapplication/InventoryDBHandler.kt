@@ -24,10 +24,25 @@ class InventoryDBHandler(context: Context,
 
     }
 
-    fun findSuggestion(suggestion: String): String? {
+    fun findSuggestion(suggestion: String) {
         val db = this.writableDatabase
 
         val sugg = "SELECT * FROM $TABLE WHERE $COLUMN_NAME LIKE  \"%$suggestion%\""
+
+        val cursor = db.rawQuery(sugg, null)
+
+        while (cursor.moveToNext()) {
+            val category = cursor.getString(1)
+            statsGroup.add(category)
+        }
+    }
+
+    fun buildInventory() {
+        inventory.clear()
+
+        val db = this.writableDatabase
+
+        val sugg = "SELECT * FROM $TABLE"
 
         val cursor = db.rawQuery(sugg, null)
 
@@ -37,8 +52,23 @@ class InventoryDBHandler(context: Context,
             myTitles.add(name)
             myDetails.add(category)
             myImages.add(R.drawable.food)
+            inventory.add(name)
+            inventoryGroups.add(category)
         }
-        return null
+    }
+
+    fun buildInventoryList(context: Context) {
+        inventory.clear()
+        val db = this.writableDatabase
+
+        val sugg = "SELECT * FROM $TABLE"
+
+        val cursor = db.rawQuery(sugg, null)
+
+        while (cursor.moveToNext()) {
+            val name = cursor.getString(0)
+            inventory.add(name)
+        }
     }
 
     fun findSuggestionIngredients(suggestion: String): String? {

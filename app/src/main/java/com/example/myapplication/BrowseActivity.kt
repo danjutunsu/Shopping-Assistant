@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.activity_browse.*
 
 
 var inventory = mutableListOf<String>()
-
+var inventoryGroups = mutableListOf<String>()
 
 var thisNum: Int = 0
 
@@ -40,7 +40,7 @@ class BrowseActivity : AppCompatActivity() {
 
         supportActionBar?.title = "Browse Food"
 
-        searchInventory("a")
+        callInventory()
     }
 
     fun searchInventory(input: String) {
@@ -56,13 +56,7 @@ class BrowseActivity : AppCompatActivity() {
     }
 
     private fun callInventory() {
-        for (element in inventory) {
-            myTitles.add(element)
-            myDetails.add(element + " Details!")
-            myImages.add(R.drawable.food)
-            suggestions.add("Used in: " + getSuggestion(element))
-            browseAdapter!!.notifyDataSetChanged()
-        }
+        InventoryDBHandler(this, null,null,1).buildInventory()
     }
 
     fun getSuggestion(s: String): String? {

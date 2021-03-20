@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.graphics.BlendMode
 import android.graphics.Color
 import android.graphics.Color.BLACK
+import android.text.method.NumberKeyListener
 import android.view.View
 import android.widget.Button
 import android.widget.Toast
@@ -30,6 +31,27 @@ class MyDBHandler(context: Context?, name: String?,
             if (it.moveToFirst()) {
                 val result = it.getString(0)
                 return result
+            }
+        }
+        return null
+    }
+
+    fun findItemSuggestion(context: Context, suggestion: String): String? {
+        InventoryDBHandler(context,null,null,1).buildInventory()
+        val db = this.writableDatabase
+
+        val sugg = "SELECT * FROM $TABLE_recipes WHERE $INGREDIENTS LIKE  \"%$suggestion%\" ORDER BY RANDOM()"
+        val cursor = db.rawQuery(sugg, null)
+
+        db.rawQuery(sugg, null).use {
+            while (cursor.moveToNext()) {
+                var ingredient = cursor.getString(6)
+                for (element in ingredient) {
+                    if (ingredient.substringAfterLast(" ").capitalize() in inventory) {
+                        println("found one: " + ingredient.substringAfterLast(" ").capitalize())
+                        return ingredient.substringAfterLast(" ").capitalize()
+                    }
+                }
             }
         }
         return null

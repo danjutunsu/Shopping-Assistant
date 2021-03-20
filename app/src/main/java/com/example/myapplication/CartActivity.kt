@@ -1,18 +1,12 @@
 package com.example.myapplication
 
-import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.View.GONE
-import android.view.View.INVISIBLE
-import android.widget.Toast
-import androidx.core.view.iterator
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.activity_browse.*
-import kotlinx.android.synthetic.main.activity_cart.cartRecyclerView
+import kotlinx.android.synthetic.main.activity_cart.statsRecyclerView
 import kotlinx.android.synthetic.main.list_layout.*
 
 var cart = mutableListOf<String>()
@@ -24,10 +18,10 @@ class CartActivity : AppCompatActivity() {
         setContentView(R.layout.activity_cart)
 
         layoutManager = LinearLayoutManager(this)
-        cartRecyclerView.layoutManager = layoutManager
+        statsRecyclerView.layoutManager = layoutManager
 
         cartAdapter = CartRecyclerAdapter()
-        cartRecyclerView.adapter = cartAdapter
+        statsRecyclerView.adapter = cartAdapter
 
         supportActionBar?.title = "Shopping Cart"
 

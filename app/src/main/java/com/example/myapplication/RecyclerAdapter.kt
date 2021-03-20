@@ -13,8 +13,6 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import kotlinx.android.synthetic.main.activity_stats.*
-import org.w3c.dom.Text
 
 internal lateinit var delBtn: ImageView
 internal lateinit var addBtn: ImageView
@@ -22,6 +20,9 @@ internal lateinit var likeBtn: ImageView
 internal lateinit var likeButton: ImageView
 internal lateinit var findBtn: Button
 internal lateinit var statsBtn: Button
+internal lateinit var yesBtn: Button
+internal lateinit var noBtn: Button
+
 
 var myTitles = mutableListOf<String>()
 var ingredients = mutableListOf<String>()
@@ -34,6 +35,8 @@ var layoutManager: RecyclerView.LayoutManager? = null
 var adapter: RecyclerView.Adapter<CustomViewHolder>? = null
 var browseAdapter: RecyclerView.Adapter<BrowseViewHolder>? = null
 var cartAdapter: RecyclerView.Adapter<CartViewHolder>? = null
+var statsAdapter: RecyclerView.Adapter<StatsViewHolder>? = null
+
 
 class RecyclerAdapter : RecyclerView.Adapter<CustomViewHolder>() {
 
@@ -470,11 +473,129 @@ class CartViewHolder(val view: View): ViewHolder(view) {
         statsBtn!!.setOnClickListener {
             current = "StatsActivity"
 
-            StatsActivity().textView.text = "GAHLIC"
+            stats.clear()
+            statsGroup.clear()
+            statsInstructions.clear()
+
+
+            val dbHandler = CartDBHandler(view.context, null, null, 1)
+            var name = dbHandler.getSuggestion(view.context, myTitles[adapterPosition])
+
+            if (name != null) {
+                stats.add(name!!)
+            } else {
+                stats.add("No common ingredients found.")
+            }
+            val invDBHandler = InventoryDBHandler(view.context,null,null,1)
+
+            if (stats[0] != null) {
+                var group: String = invDBHandler.findSuggestion(stats[0]).toString()
+                statsGroup.add(group)
+            }
+
+            if (stats[0] in cart) {
+                statsInstructions.add("In the cart! Good guess!")
+            } else {
+                statsInstructions.add("Not in cart. Would you like to add?")
+            }
+
+            /**
+             *
+             * ADD FUNCTIONALITY TO GIVE THE USER A CHOICE TO ADD THE ITEM TO THEIR CART IF NOT PRESENT.
+             *
+                    * IF USER CHOOSES NOT TO, ADD THIS CHOICE TO THE STATISTICS AGAINST THE METHOD.
+             *
+                    * IF THE USER CHOOSES YES, ADD THIS CHOICE TO THE STATISTICS FOR THE METHOD.
+             *
+             */
+
+
+            myTitles.clear()
+            myDetails.clear()
+            myImages.clear()
 
             val intent = Intent(view.context, StatsActivity::class.java)
             view.context.startActivity(intent)
-
         }
+    }
+}
+
+class StatsRecyclerAdapter : RecyclerView.Adapter<StatsViewHolder>() {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StatsViewHolder {
+        val itemView = LayoutInflater.from(parent.context)
+
+        val holder = StatsViewHolder(itemView.inflate(R.layout.stats_layout, parent, false))
+
+        return holder
+    }
+
+    override fun getItemCount(): Int {
+        return myTitles.size
+
+    }
+    fun setPosition(newPosition:Int) {
+        position = newPosition
+    }
+
+    fun getPosition(): Int {
+        return position
+    }
+
+
+    override fun onBindViewHolder(holder: StatsViewHolder, position: Int) {
+        holder.itemTitle.text = myTitles[position]
+        holder.itemDetail.text = myDetails[position]
+        holder.itemInstructions.text = myInstructions[position]
+//        holder.itemInstructions.text = myInstructions[position]
+        holder.itemImage.setImageResource(myImages[position])
+    }
+}
+
+class StatsViewHolder(val view: View): ViewHolder(view) {
+    var itemImage: ImageView
+    var itemTitle: TextView
+    var itemDetail: TextView
+    var itemInstructions: TextView
+    var cardView: CardView
+
+    init {
+        itemImage = itemView.findViewById(R.id.item_image)
+        itemTitle = itemView.findViewById(R.id.item_title)
+        itemDetail = itemView.findViewById(R.id.item_detail)
+        itemInstructions = itemView.findViewById(R.id.instructions)
+        cardView = itemView.findViewById(R.id.card_view)
+        yesBtn = itemView.findViewById(R.id.yesBtn)
+        noBtn = itemView.findViewById(R.id.noBtn)
+
+        var changed = 0
+        var defaultCardColor = cardView.cardBackgroundColor.defaultColor
+
+        // sets position on click
+        view.setOnClickListener {
+            StatsRecyclerAdapter().setPosition(adapterPosition)
+            if (changed == 0) {
+                cardView.setBackgroundColor(parseColor("#053A4A"))
+                changed = 1
+            } else if (changed == 1) {
+                cardView.setBackgroundColor(defaultCardColor)
+                changed = 0
+            }
+        }
+
+        yesBtn!!.setOnClickListener {
+            val dbHandler = CartDBHandler(view.context, null, null, 1)
+
+            dbHandler.addToCart(view.context, adapterPosition)
+        }
+
+
+//        delBtn!!.setOnClickListener {
+//            val dbHandler = CartDBHandler(view.context, null, null, 1)
+//            dbHandler.deleteItem(view.context, adapterPosition)
+//
+//            cartAdapter!!.notifyDataSetChanged()
+//        }
+
     }
 }

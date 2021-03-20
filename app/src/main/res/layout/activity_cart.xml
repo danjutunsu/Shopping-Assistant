@@ -33,7 +33,7 @@
         app:srcCompat="@drawable/exclaim" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/cartRecyclerView"
+        android:id="@+id/statsRecyclerView"
         android:layout_width="438dp"
         android:layout_height="524dp"
         app:layout_constraintBottom_toBottomOf="parent"

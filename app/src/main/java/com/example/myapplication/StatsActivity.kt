@@ -1,27 +1,54 @@
 package com.example.myapplication
 
-import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.View.GONE
-import android.view.View.INVISIBLE
-import android.widget.Toast
-import androidx.core.view.iterator
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.activity_browse.*
-import kotlinx.android.synthetic.main.activity_cart.cartRecyclerView
+import kotlinx.android.synthetic.main.activity_cart.*
 import kotlinx.android.synthetic.main.list_layout.*
 
+var stats = mutableListOf<String>()
+var statsGroup = mutableListOf<String>()
+var statsInstructions = mutableListOf<String>()
 
-class StatsActivity : AppCompatActivity() {
+class StatsActivity() : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_stats)
 
+        layoutManager = LinearLayoutManager(this)
+        statsRecyclerView.layoutManager = layoutManager
+
+        statsAdapter = StatsRecyclerAdapter()
+
+        statsRecyclerView.adapter = statsAdapter
+        for (element in stats) {
+            myTitles.add(element)
+            myImages.add(R.drawable.food)
+        }
+
+        for (element in statsInstructions) {
+            myInstructions.add(element)
+        }
+
+        for (element in statsGroup) {
+            myDetails.add(element)
+        }
+
+        if (myTitles[0] in cart) {
+            println("It's in the cart!")
+        }
+
         supportActionBar?.title = "Stats"
+    }
+
+    fun openCard(pos: Int) {
+        selectedItem.add(myTitles[pos])
+        adapter!!.notifyDataSetChanged()
+
+        myTitles.add(selectedItem[0])
     }
 
     fun goHome(view: View) {
@@ -38,7 +65,7 @@ class StatsActivity : AppCompatActivity() {
         myTitles.add("Item " + myTitles.size.plus(1))
         myDetails.add(myTitles[myTitles.size.minus(1)] + " Details!")
         myImages.add(R.drawable.food)
-        cartAdapter!!.notifyDataSetChanged()
+        statsAdapter!!.notifyDataSetChanged()
     }
 
     fun getSuggestion(s: String): String? {
@@ -103,5 +130,15 @@ class StatsActivity : AppCompatActivity() {
         if (cart.size > 0) {
             BoughtHistoryDBHandler(this,null,null,1).addToHistory(view.context)
         }
+    }
+
+    fun goToCart(view: View) {
+        current = "CartActivity"
+
+        myTitles.clear()
+        myDetails.clear()
+        myImages.clear()
+        val intent = Intent(this, CartActivity::class.java)
+        startActivity(intent);
     }
 }

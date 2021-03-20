@@ -134,6 +134,12 @@ class CartDBHandler(context: Context,
         return
     }
 
+    fun getSuggestion(context: Context, s: String): String? {
+        val dbHandler = MyDBHandler(context, null, null, 1)
+        val name: String? = dbHandler.findItemSuggestion(context, s)
+        return name
+    }
+
     companion object {
 
         private val DATABASE_VERSION = 1
