@@ -61,7 +61,7 @@ class CartActivity : AppCompatActivity() {
         myTitles.clear()
         myDetails.clear()
         myImages.clear()
-        suggestion.visibility = GONE
+        positiveText.visibility = GONE
 
         getSuggestion("Chicken")?.let { myTitles.add(it) }
         myDetails.add(getSuggestion("Chicken") + " Details!")

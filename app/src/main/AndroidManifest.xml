@@ -10,7 +10,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
-        <activity android:name=".MainActivity"
+        <activity android:name=".RadarChartActivity"></activity>
+        <activity android:name=".PieChartActivity" />
+        <activity android:name=".BarChartActivity" />
+        <activity
+            android:name=".MainActivity"
             android:windowSoftInputMode="adjustNothing">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -18,21 +22,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".CartActivity"
-            android:windowSoftInputMode="adjustNothing">
-        </activity>
-        <activity android:name=".BrowseActivity"
-            android:windowSoftInputMode="adjustNothing">
-        </activity>
-        <activity android:name=".FavoritesActivity"
-            android:windowSoftInputMode="adjustNothing">
-        </activity>
-        <activity android:name=".SuggestionsActivity"
-            android:windowSoftInputMode="adjustNothing">
-        </activity>
-        <activity android:name=".StatsActivity"
-            android:windowSoftInputMode="adjustNothing">
-        </activity>
+        <activity
+            android:name=".CartActivity"
+            android:windowSoftInputMode="adjustNothing" />
+        <activity
+            android:name=".BrowseActivity"
+            android:windowSoftInputMode="adjustNothing" />
+        <activity
+            android:name=".FavoritesActivity"
+            android:windowSoftInputMode="adjustNothing" />
+        <activity
+            android:name=".SuggestionsActivity"
+            android:windowSoftInputMode="adjustNothing" />
+        <activity
+            android:name=".StatsActivity"
+            android:windowSoftInputMode="adjustNothing" />
     </application>
 
 </manifest>

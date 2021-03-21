@@ -10,6 +10,7 @@ import kotlinx.android.synthetic.main.activity_cart.*
 import kotlinx.android.synthetic.main.list_layout.*
 
 var stats = mutableListOf<String>()
+var original = mutableListOf<String>()
 var statsGroup = mutableListOf<String>()
 var statsInstructions = mutableListOf<String>()
 
@@ -59,33 +60,6 @@ class StatsActivity() : AppCompatActivity() {
         myImages.clear()
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
-    }
-
-    fun addItem(view: View) {
-        myTitles.add("Item " + myTitles.size.plus(1))
-        myDetails.add(myTitles[myTitles.size.minus(1)] + " Details!")
-        myImages.add(R.drawable.food)
-        statsAdapter!!.notifyDataSetChanged()
-    }
-
-    fun getSuggestion(s: String): String? {
-//        return myTitles[position]
-        val dbHandler = MyDBHandler(this, null, null, 1)
-        val name: String? = dbHandler.findSuggestion(s)
-        return name
-    }
-
-    fun getSuggestion(view: View) {
-        myTitles.clear()
-        myDetails.clear()
-        myImages.clear()
-        suggestion.visibility = GONE
-
-        getSuggestion("Chicken")?.let { myTitles.add(it) }
-        myDetails.add(getSuggestion("Chicken") + " Details!")
-        myImages.add(R.drawable.food)
-        cartAdapter!!.notifyDataSetChanged()
-        println(getSuggestion("Chicken"))
     }
 
     fun goToFavorites(view: View) {
@@ -140,5 +114,12 @@ class StatsActivity() : AppCompatActivity() {
         myImages.clear()
         val intent = Intent(this, CartActivity::class.java)
         startActivity(intent);
+    }
+
+    fun clearSearches(view: View) {
+        val dbHandler = HistoryDBHandler(view.context, null, null, 1)
+        val accuracyDBHandler = AccuracyDBHandler(view.context,null,null,1)
+        dbHandler.clearSearches(view.context)
+        accuracyDBHandler.clearDB(view.context)
     }
 }

@@ -183,7 +183,8 @@ class MainActivity : AppCompatActivity() {
 
     fun clearSearches(view: View) {
             val dbHandler = HistoryDBHandler(view.context, null, null, 1)
-
+            val accuracyDBHandler = AccuracyDBHandler(view.context,null,null,1)
             dbHandler.clearSearches(view.context)
+            accuracyDBHandler.clearDB(view.context)
     }
 }

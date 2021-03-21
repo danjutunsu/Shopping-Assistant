@@ -5,4 +5,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="_1">1</string>
+    <string name="bar_chart">Bar Chart</string>
+    <string name="pie_chart">Pie Chart</string>
+    <string name="radar_chart">Radar Chart</string>
 </resources>

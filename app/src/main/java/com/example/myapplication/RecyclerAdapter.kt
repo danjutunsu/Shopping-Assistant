@@ -13,6 +13,8 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.github.mikephil.charting.data.BarEntry
+import java.sql.BatchUpdateException
 
 internal lateinit var delBtn: ImageView
 internal lateinit var addBtn: ImageView
@@ -181,7 +183,7 @@ class BrowseViewHolder(view: View): ViewHolder(view) {
         itemImage = itemView.findViewById(R.id.item_image)
         itemTitle = itemView.findViewById(R.id.item_title)
         itemDetail = itemView.findViewById(R.id.item_detail)
-        itemSuggestions = itemView.findViewById(R.id.suggestion)
+        itemSuggestions = itemView.findViewById(R.id.positiveText)
         cardView = itemView.findViewById(R.id.card_view)
 
         addBtn = itemView.findViewById(R.id.addButton)!!
@@ -433,7 +435,7 @@ class CartViewHolder(val view: View): ViewHolder(view) {
         itemTitle = itemView.findViewById(R.id.item_title)
         itemDetail = itemView.findViewById(R.id.item_detail)
         cardView = itemView.findViewById(R.id.card_view)
-        delBtn = itemView.findViewById(R.id.deleteButton)!!
+        delBtn = itemView.findViewById(R.id.deleteButton)
         findBtn = itemView.findViewById(R.id.findRecipes)
         statsBtn = itemView.findViewById(R.id.common)
 
@@ -477,12 +479,12 @@ class CartViewHolder(val view: View): ViewHolder(view) {
             statsGroup.clear()
             statsInstructions.clear()
 
-
             val dbHandler = CartDBHandler(view.context, null, null, 1)
             var name = dbHandler.getSuggestion(view.context, myTitles[adapterPosition])
 
             if (name != null) {
                 stats.add(name!!)
+                original.add(myTitles[0])
             } else {
                 stats.add("No common ingredients found.")
             }
@@ -493,22 +495,12 @@ class CartViewHolder(val view: View): ViewHolder(view) {
                 statsGroup.add(group)
             }
 
-            if (stats[0] in cart) {
-                statsInstructions.add("In the cart! Good guess!")
+            if (myTitles[0] in cart) {
+                statsInstructions.add("In the cart!!! Good guess!")
+                AccuracyDBHandler(view.context, null,null,1).addPositive(view.context)
             } else {
-                statsInstructions.add("Not in cart. Would you like to add?")
+                statsInstructions.add("Not in cart! Would you like to add?")
             }
-
-            /**
-             *
-             * ADD FUNCTIONALITY TO GIVE THE USER A CHOICE TO ADD THE ITEM TO THEIR CART IF NOT PRESENT.
-             *
-                    * IF USER CHOOSES NOT TO, ADD THIS CHOICE TO THE STATISTICS AGAINST THE METHOD.
-             *
-                    * IF THE USER CHOOSES YES, ADD THIS CHOICE TO THE STATISTICS FOR THE METHOD.
-             *
-             */
-
 
             myTitles.clear()
             myDetails.clear()
@@ -557,19 +549,39 @@ class StatsViewHolder(val view: View): ViewHolder(view) {
     var itemTitle: TextView
     var itemDetail: TextView
     var itemInstructions: TextView
+    var suggestions: TextView
+    var suggestions2: TextView
+    var positiveResult: TextView
+    var negativeResult: TextView
     var cardView: CardView
+    var BarChart: Button
+    var PieChart: Button
+    var RadarChart: Button
 
     init {
         itemImage = itemView.findViewById(R.id.item_image)
         itemTitle = itemView.findViewById(R.id.item_title)
         itemDetail = itemView.findViewById(R.id.item_detail)
         itemInstructions = itemView.findViewById(R.id.instructions)
+        suggestions = itemView.findViewById(R.id.positiveText)
+        suggestions2 = itemView.findViewById(R.id.suggestion2)
+        positiveResult = itemView.findViewById(R.id.positiveResult)
+        negativeResult = itemView.findViewById(R.id.negativeResult)
         cardView = itemView.findViewById(R.id.card_view)
         yesBtn = itemView.findViewById(R.id.yesBtn)
         noBtn = itemView.findViewById(R.id.noBtn)
+        BarChart = itemView.findViewById(R.id.buttonBarChart)
+        PieChart = itemView.findViewById(R.id.buttonPieChart)
+        RadarChart = itemView.findViewById(R.id.buttonRadarChart)
 
         var changed = 0
         var defaultCardColor = cardView.cardBackgroundColor.defaultColor
+
+        AccuracyDBHandler(view.context, null,null,1).queryDB(view.context)
+
+        suggestions2.text = totalItems[0]
+        positiveResult.text = positiveResults[0]
+        negativeResult.text = negativeResults[0]
 
         // sets position on click
         view.setOnClickListener {
@@ -587,15 +599,67 @@ class StatsViewHolder(val view: View): ViewHolder(view) {
             val dbHandler = CartDBHandler(view.context, null, null, 1)
 
             dbHandler.addToCart(view.context, adapterPosition)
+            AccuracyDBHandler(view.context, null,null,1).addPositive(view.context)
+            println("Added!")
+
+            val intent = Intent(view.context, CartActivity::class.java)
+            view.context.startActivity(intent)
         }
 
+        noBtn!!.setOnClickListener {
+            AccuracyDBHandler(view.context, null,null,1).addNegative(view.context)
 
-//        delBtn!!.setOnClickListener {
-//            val dbHandler = CartDBHandler(view.context, null, null, 1)
-//            dbHandler.deleteItem(view.context, adapterPosition)
-//
-//            cartAdapter!!.notifyDataSetChanged()
-//        }
+            current = "StatsActivity"
 
+            stats.clear()
+            statsGroup.clear()
+            statsInstructions.clear()
+
+
+            val dbHandler = CartDBHandler(view.context, null, null, 1)
+            var name = dbHandler.getSuggestion(view.context, myTitles[adapterPosition])
+
+            println("Searching for " + original[0])
+
+            if (name != null) {
+                stats.add(name!!)
+            } else {
+                stats.add("No common ingredients found.")
+            }
+            val invDBHandler = InventoryDBHandler(view.context,null,null,1)
+
+            if (stats[0] != null) {
+                var group: String = invDBHandler.findSuggestion(stats[0]).toString()
+                statsGroup.add(group)
+            }
+
+            if (myTitles[0] in cart) {
+                statsInstructions.add("In the cart... Good guess!")
+            } else {
+                statsInstructions.add("Not in cart. Would you like to add?")
+            }
+
+            myTitles.clear()
+            myDetails.clear()
+            myImages.clear()
+
+            val intent = Intent(view.context, StatsActivity::class.java)
+            view.context.startActivity(intent)
+        }
+
+        BarChart.setOnClickListener {
+            val intent = Intent(view.context, BarChartActivity::class.java)
+            view.context.startActivity(intent)
+        }
+
+        PieChart.setOnClickListener {
+            val intent = Intent(view.context, PieChartActivity::class.java)
+            view.context.startActivity(intent)
+        }
+
+        RadarChart.setOnClickListener {
+            val intent = Intent(view.context, RadarChartActivity::class.java)
+            view.context.startActivity(intent)
+        }
     }
 }

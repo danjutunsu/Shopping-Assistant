@@ -72,7 +72,7 @@
             app:layout_constraintEnd_toEndOf="parent"></TextView>
 
         <TextView
-            android:id="@+id/suggestion"
+            android:id="@+id/positiveText"
             android:layout_width="148dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="88dp"

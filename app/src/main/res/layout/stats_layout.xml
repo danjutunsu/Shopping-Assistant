@@ -18,35 +18,41 @@
         android:layout_height="wrap_content"
         android:padding="11dp">
 
+        <SurfaceView
+            android:id="@+id/surfaceView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="13dp"
+            android:layout_marginLeft="13dp"
+            android:layout_marginTop="135dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <Button
             android:id="@+id/noBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="29dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
             android:text="No"
             app:backgroundTint="#db3a34"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/yesBtn"
-            app:layout_constraintTop_toBottomOf="@+id/item_detail"
-            app:layout_constraintVertical_bias="0.526" />
+            app:layout_constraintTop_toTopOf="@+id/yesBtn" />
 
         <Button
             android:id="@+id/yesBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="80dp"
-            android:layout_marginLeft="80dp"
-            android:layout_marginTop="29dp"
+            android:layout_marginStart="92dp"
+            android:layout_marginLeft="92dp"
+            android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"
             android:text="Yes"
             app:backgroundTint="#db3a34"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/item_detail"
-            app:layout_constraintVertical_bias="0.578" />
+            app:layout_constraintTop_toBottomOf="@+id/instructions"
+            app:layout_constraintVertical_bias="0.052" />
 
         <ImageView
             android:id="@+id/item_image"
@@ -77,27 +83,99 @@
 
         <TextView
             android:id="@+id/instructions"
-            android:layout_width="242dp"
+            android:layout_width="237dp"
             android:layout_height="27dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="48dp"
-            android:layout_marginRight="48dp"
-            android:layout_marginBottom="56dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="@+id/item_detail"
             app:layout_constraintTop_toBottomOf="@+id/item_detail"></TextView>
 
         <TextView
-            android:id="@+id/suggestion"
+            android:id="@+id/positiveText"
             android:layout_width="148dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="88dp"
-            android:layout_marginEnd="164dp"
-            android:layout_marginRight="164dp"
+            android:layout_marginTop="16dp"
+            android:text="% of positive:"
+            app:layout_constraintStart_toStartOf="@+id/suggestion3"
+            app:layout_constraintTop_toBottomOf="@+id/suggestion3"></TextView>
+
+        <TextView
+            android:id="@+id/suggestion3"
+            android:layout_width="148dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="22dp"
+            android:layout_marginLeft="22dp"
+            android:text="Number of suggestions:"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/yesBtn"></TextView>
+
+        <TextView
+            android:id="@+id/suggestion2"
+            android:layout_width="148dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:text="fix me"
+            app:layout_constraintStart_toEndOf="@+id/positiveText"
+            app:layout_constraintTop_toBottomOf="@+id/yesBtn"></TextView>
+
+        <TextView
+            android:id="@+id/negativeText"
+            android:layout_width="148dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="% of negative:"
+            app:layout_constraintStart_toStartOf="@+id/suggestion3"
+            app:layout_constraintTop_toBottomOf="@+id/positiveText"></TextView>
+
+        <TextView
+            android:id="@+id/positiveResult"
+            android:layout_width="148dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:text="fix me"
+            app:layout_constraintStart_toEndOf="@+id/positiveText"
+            app:layout_constraintTop_toTopOf="@+id/positiveText"></TextView>
+
+        <TextView
+            android:id="@+id/negativeResult"
+            android:layout_width="148dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:text="fix me"
+            app:layout_constraintStart_toEndOf="@+id/positiveText"
+            app:layout_constraintTop_toTopOf="@+id/negativeText"></TextView>
+
+        <Button
+            android:id="@+id/buttonBarChart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="@string/bar_chart"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/item_image"
-            app:layout_constraintTop_toTopOf="parent"></TextView>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/negativeText" />
+
+        <Button
+            android:id="@+id/buttonPieChart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/pie_chart"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonBarChart" />
+
+        <Button
+            android:id="@+id/buttonRadarChart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/radar_chart"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonPieChart" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
