@@ -47,7 +47,7 @@ class MyDBHandler(context: Context?, name: String?,
             while (cursor.moveToNext()) {
                 var ingredient = cursor.getString(6)
                 for (element in ingredient) {
-                    if (ingredient.substringAfterLast(" ").capitalize() in inventory) {
+                    if (ingredient.substringAfterLast(" ").capitalize() in inventory && (ingredient.substringAfterLast(" ").capitalize() !in asked) && (ingredient.substringAfterLast(" ").capitalize()) != suggestion) {
                         println("found one: " + ingredient.substringAfterLast(" ").capitalize())
                         return ingredient.substringAfterLast(" ").capitalize()
                     }
@@ -65,20 +65,6 @@ class MyDBHandler(context: Context?, name: String?,
         db.rawQuery(ingredients, null).use {
             if (it.moveToFirst()) {
                 val result = it.getString(6)
-                return result
-            }
-        }
-        return null
-    }
-
-    fun findSuggestionInstructions(suggestion: String): String? {
-        val db = this.writableDatabase
-
-        val instructions = "SELECT * FROM $TABLE_recipes WHERE $COLUMN_NAME LIKE  \"%$suggestion%\""
-
-        db.rawQuery(instructions, null).use {
-            if (it.moveToFirst()) {
-                val result = it.getString(7)
                 return result
             }
         }
@@ -245,9 +231,7 @@ class MyDBHandler(context: Context?, name: String?,
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int,
-                           newVersion: Int) {
-
-    }
+                           newVersion: Int) {    }
 
     companion object {
 

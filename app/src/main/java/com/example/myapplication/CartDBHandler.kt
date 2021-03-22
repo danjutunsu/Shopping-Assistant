@@ -79,7 +79,7 @@ class CartDBHandler(context: Context,
         myDetails.add(myTitles[pos] + " Details!")
         myImages.add(R.drawable.food)
         myInstructions.add("INSTRUCTIONS")
-        adapter!!.notifyDataSetChanged()
+        cartAdapter!!.notifyDataSetChanged()
     }
 
     fun callCart() {
@@ -112,9 +112,7 @@ class CartDBHandler(context: Context,
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int,
-                           newVersion: Int) {
-
-    }
+                           newVersion: Int) {    }
 
     fun buildCart() {
         var db = this.writableDatabase
@@ -141,12 +139,8 @@ class CartDBHandler(context: Context,
     }
 
     companion object {
-
-        private val DATABASE_VERSION = 1
         internal val DATABASE_NAME = "cart.db"
         val TABLE = "cart"
-
-        val COLUMN_NAME = "food_name"
     }
 
 }

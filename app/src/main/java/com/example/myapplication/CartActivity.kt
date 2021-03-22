@@ -43,31 +43,11 @@ class CartActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    fun addItem(view: View) {
-        myTitles.add("Item " + myTitles.size.plus(1))
-        myDetails.add(myTitles[myTitles.size.minus(1)] + " Details!")
-        myImages.add(R.drawable.food)
-        cartAdapter!!.notifyDataSetChanged()
-    }
-
     fun getSuggestion(s: String): String? {
 //        return myTitles[position]
         val dbHandler = MyDBHandler(this, null, null, 1)
         val name: String? = dbHandler.findSuggestion(s)
         return name
-    }
-
-    fun getSuggestion(view: View) {
-        myTitles.clear()
-        myDetails.clear()
-        myImages.clear()
-        positiveText.visibility = GONE
-
-        getSuggestion("Chicken")?.let { myTitles.add(it) }
-        myDetails.add(getSuggestion("Chicken") + " Details!")
-        myImages.add(R.drawable.food)
-        cartAdapter!!.notifyDataSetChanged()
-        println(getSuggestion("Chicken"))
     }
 
     fun goToFavorites(view: View) {

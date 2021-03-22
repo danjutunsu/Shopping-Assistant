@@ -18,13 +18,7 @@ import kotlinx.android.synthetic.main.activity_browse.*
 var inventory = mutableListOf<String>()
 var inventoryGroups = mutableListOf<String>()
 
-var thisNum: Int = 0
-
 lateinit var button : Button
-
-fun increaseNum(view: View, add: Int) {
-    thisNum += add
-}
 
 class BrowseActivity : AppCompatActivity() {
 
@@ -43,34 +37,15 @@ class BrowseActivity : AppCompatActivity() {
         callInventory()
     }
 
-    fun searchInventory(input: String) {
-        InventoryDBHandler(this, null,null,1).findSuggestion(input)
-    }
-
     var thisNum: Int = 0
 
     fun changeNum(pos: Int) {
         thisNum = pos
         browseAdapter!!.notifyDataSetChanged()
-        println(thisNum)
     }
 
     private fun callInventory() {
         InventoryDBHandler(this, null,null,1).buildInventory()
-    }
-
-    fun getSuggestion(s: String): String? {
-//        return myTitles[position]
-        val dbHandler = MyDBHandler(this, null, null, 1)
-        val name: String? = dbHandler.findSuggestion(s)
-        return name
-    }
-
-    fun getSpecificSuggestion(s: String): Recipe? {
-//        return myTitles[position]
-        val dbHandler = MyDBHandler(this, null, null, 1)
-        val name: Recipe? = dbHandler.findRecipe(s)
-        return name
     }
 
     fun goHome(view: View) {
@@ -93,29 +68,6 @@ class BrowseActivity : AppCompatActivity() {
         myImages.clear()
         val intent = Intent(this, CartActivity::class.java)
         startActivity(intent)
-    }
-
-    fun addToCart(pos: Int) {
-
-        var name = myTitles[pos]
-        var details = myDetails[pos]
-        val dbHandler = CartDBHandler(this, null, null, 1)
-
-        var db = dbHandler.writableDatabase
-
-        db.execSQL("INSERT INTO cart('food_name', 'group') VALUES($name, $details")
-        cart.add(myTitles[pos])
-        myTitles.add(myTitles[pos])
-        myDetails.add(myTitles[pos] + " Details!")
-        myImages.add(R.drawable.food)
-        myInstructions.add("INSTRUCTIONS")
-        adapter!!.notifyDataSetChanged()
-    }
-
-    fun getSpecificSuggestion(view: View) {
-        myTitles.clear()
-        myDetails.clear()
-        myImages.clear()
     }
 
     fun goToBrowse(view: View) {

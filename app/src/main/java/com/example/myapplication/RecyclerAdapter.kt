@@ -4,8 +4,7 @@ import android.content.Intent
 import android.graphics.Color.parseColor
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
+import android.view.View.*
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
@@ -13,7 +12,10 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.example.myapplication.noBtn
+import com.example.myapplication.yesBtn
 import com.github.mikephil.charting.data.BarEntry
+import kotlinx.android.synthetic.main.stats_layout.*
 import java.sql.BatchUpdateException
 
 internal lateinit var delBtn: ImageView
@@ -25,12 +27,9 @@ internal lateinit var statsBtn: Button
 internal lateinit var yesBtn: Button
 internal lateinit var noBtn: Button
 
-
 var myTitles = mutableListOf<String>()
-var ingredients = mutableListOf<String>()
 var myDetails = mutableListOf<String>()
 var myInstructions = mutableListOf<String>()
-var suggestions = mutableListOf<String?>()
 var myImages = mutableListOf<Int>()
 var position = BrowseRecyclerAdapter().getPosition()
 var layoutManager: RecyclerView.LayoutManager? = null
@@ -50,20 +49,12 @@ class RecyclerAdapter : RecyclerView.Adapter<CustomViewHolder>() {
         return holder
     }
 
-    override fun setHasStableIds(hasStableIds: Boolean) {
-        super.setHasStableIds(hasStableIds)
-    }
-
     override fun getItemCount(): Int {
         return myTitles.size
-
     }
+
     fun setPosition(newPosition:Int) {
         position = newPosition
-    }
-
-    fun getPosition(): Int {
-        return position
     }
 
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
@@ -73,7 +64,6 @@ class RecyclerAdapter : RecyclerView.Adapter<CustomViewHolder>() {
         holder.itemInstructions.text = myInstructions[position]
 
     }
-
 
 }
 
@@ -97,17 +87,16 @@ class CustomViewHolder(view: View): ViewHolder(view) {
         itemInstructions.visibility = GONE
         instructionsHeader.visibility = GONE
 
-        // sets position on click
         view.setOnClickListener {
             RecyclerAdapter().setPosition(adapterPosition)
         }
 
-        //deletes item when x clicked
+        // removes card from RecyclerView/Cart
         delBtn!!.setOnClickListener {
             MainActivity().deleteItem(adapterPosition)
         }
 
-        //add item to likedItems list
+        // add item to likeRecipes list
         likeButton!!.setOnClickListener {
             val dbHandler = FavoritesDBHandler(view.context, null, null, 1)
 
@@ -115,10 +104,9 @@ class CustomViewHolder(view: View): ViewHolder(view) {
         }
 
         var changed = 0
-
         var defaultCardColor = cardView.cardBackgroundColor.defaultColor
 
-        // sets position on click
+        // changes color of card on click and expands the instructions textviews
         view.setOnClickListener {
             BrowseRecyclerAdapter().setPosition(adapterPosition)
             if (changed == 0) {
@@ -143,14 +131,6 @@ class BrowseRecyclerAdapter() : RecyclerView.Adapter<BrowseViewHolder>() {
         val holder = BrowseViewHolder(itemView.inflate(R.layout.browse_layout, parent, false))
 
         return holder
-    }
-
-    override fun setHasStableIds(hasStableIds: Boolean) {
-        super.setHasStableIds(hasStableIds)
-    }
-
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-        super.onAttachedToRecyclerView(recyclerView)
     }
 
     override fun getItemCount(): Int {
@@ -191,7 +171,7 @@ class BrowseViewHolder(view: View): ViewHolder(view) {
         var changed = 0
         var defaultCardColor = cardView.cardBackgroundColor.defaultColor
 
-        // sets position on click
+        // changes color of card on click and expands the instructions textviews
         view.setOnClickListener {
             BrowseRecyclerAdapter().setPosition(adapterPosition)
 
@@ -244,10 +224,6 @@ class SuggestionsRecyclerAdapter() : RecyclerView.Adapter<SuggestionsViewHolder>
         position = newPosition
     }
 
-    fun getPosition(): Int {
-        return position
-    }
-
     override fun onBindViewHolder(holder: SuggestionsViewHolder, position: Int) {
         holder.itemTitle.text = myTitles[position]
         holder.itemDetail.text = myDetails[position]
@@ -280,7 +256,7 @@ class SuggestionsViewHolder(view: View): ViewHolder(view) {
         var changed = 0
         var defaultCardColor = cardView.cardBackgroundColor.defaultColor
 
-        // sets position on click
+        // changes color of card on click and expands the instructions textviews
         view.setOnClickListener {
             SuggestionsRecyclerAdapter().setPosition(adapterPosition)
             if (changed == 0) {
@@ -315,9 +291,6 @@ class FavoritesRecyclerAdapter() : RecyclerView.Adapter<FavoritesViewHolder>() {
 
         val holder = FavoritesViewHolder(itemView.inflate(R.layout.favorites_layout, parent, false))
 
-//        findButton = holder.itemView.findViewById(R.id.findRecipes)
-//        findButton.setOnClickListener(this)
-
         return holder
     }
 
@@ -331,10 +304,6 @@ class FavoritesRecyclerAdapter() : RecyclerView.Adapter<FavoritesViewHolder>() {
     }
     fun setPosition(newPosition:Int) {
         position = newPosition
-    }
-
-    fun getPosition(): Int {
-        return position
     }
 
     override fun onBindViewHolder(holder: FavoritesViewHolder, position: Int) {
@@ -368,7 +337,7 @@ class FavoritesViewHolder(view: View): ViewHolder(view) {
         var changed = 0
         var defaultCardColor = cardView.cardBackgroundColor.defaultColor
 
-        // sets position on click
+        // changes color of card on click and expands the instructions textviews
         view.setOnClickListener {
             FavoritesRecyclerAdapter().setPosition(adapterPosition)
             if (changed == 0) {
@@ -411,11 +380,6 @@ class CartRecyclerAdapter : RecyclerView.Adapter<CartViewHolder>() {
         position = newPosition
     }
 
-    fun getPosition(): Int {
-        return position
-    }
-
-
     override fun onBindViewHolder(holder: CartViewHolder, position: Int) {
         holder.itemTitle.text = myTitles[position]
         holder.itemDetail.text = myDetails[position]
@@ -443,7 +407,7 @@ class CartViewHolder(val view: View): ViewHolder(view) {
         var changed = 0
         var defaultCardColor = cardView.cardBackgroundColor.defaultColor
 
-        // sets position on click
+        // changes color of card on click and expands the instructions textviews
         view.setOnClickListener {
             CartRecyclerAdapter().setPosition(adapterPosition)
             if (changed == 0) {
@@ -495,11 +459,16 @@ class CartViewHolder(val view: View): ViewHolder(view) {
                 statsGroup.add(group)
             }
 
-            if (myTitles[0] in cart) {
-                statsInstructions.add("In the cart!!! Good guess!")
+            if (name in cart) {
+                statsInstructions.add("In the cart!")
+                asked.add(name!!)
+                for (element in asked) {
+                    println("Asked: " + element)
+                }
                 AccuracyDBHandler(view.context, null,null,1).addPositive(view.context)
             } else {
                 statsInstructions.add("Not in cart! Would you like to add?")
+                dbHandler.getSuggestion(view.context, myTitles[adapterPosition])
             }
 
             myTitles.clear()
@@ -530,16 +499,10 @@ class StatsRecyclerAdapter : RecyclerView.Adapter<StatsViewHolder>() {
         position = newPosition
     }
 
-    fun getPosition(): Int {
-        return position
-    }
-
-
     override fun onBindViewHolder(holder: StatsViewHolder, position: Int) {
         holder.itemTitle.text = myTitles[position]
         holder.itemDetail.text = myDetails[position]
         holder.itemInstructions.text = myInstructions[position]
-//        holder.itemInstructions.text = myInstructions[position]
         holder.itemImage.setImageResource(myImages[position])
     }
 }
@@ -574,6 +537,19 @@ class StatsViewHolder(val view: View): ViewHolder(view) {
         PieChart = itemView.findViewById(R.id.buttonPieChart)
         RadarChart = itemView.findViewById(R.id.buttonRadarChart)
 
+
+        if (statsInstructions[0] == "In the cart!") {
+            yesBtn.visibility = GONE
+            noBtn.visibility = GONE
+        }
+
+        if (stats[0] == "No common ingredients found.") {
+            myDetails[0] = ""
+            myInstructions[0] = ""
+            yesBtn.visibility = GONE
+            noBtn.visibility = GONE
+        }
+
         var changed = 0
         var defaultCardColor = cardView.cardBackgroundColor.defaultColor
 
@@ -583,7 +559,7 @@ class StatsViewHolder(val view: View): ViewHolder(view) {
         positiveResult.text = positiveResults[0]
         negativeResult.text = negativeResults[0]
 
-        // sets position on click
+        // changes color of card on click and expands the instructions textviews
         view.setOnClickListener {
             StatsRecyclerAdapter().setPosition(adapterPosition)
             if (changed == 0) {
@@ -600,7 +576,6 @@ class StatsViewHolder(val view: View): ViewHolder(view) {
 
             dbHandler.addToCart(view.context, adapterPosition)
             AccuracyDBHandler(view.context, null,null,1).addPositive(view.context)
-            println("Added!")
 
             val intent = Intent(view.context, CartActivity::class.java)
             view.context.startActivity(intent)
@@ -618,8 +593,7 @@ class StatsViewHolder(val view: View): ViewHolder(view) {
 
             val dbHandler = CartDBHandler(view.context, null, null, 1)
             var name = dbHandler.getSuggestion(view.context, myTitles[adapterPosition])
-
-            println("Searching for " + original[0])
+            asked.add(name!!)
 
             if (name != null) {
                 stats.add(name!!)
@@ -634,7 +608,7 @@ class StatsViewHolder(val view: View): ViewHolder(view) {
             }
 
             if (myTitles[0] in cart) {
-                statsInstructions.add("In the cart... Good guess!")
+                statsInstructions.add("In the cart!")
             } else {
                 statsInstructions.add("Not in cart. Would you like to add?")
             }

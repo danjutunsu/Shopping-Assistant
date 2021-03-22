@@ -11,7 +11,6 @@ import java.lang.reflect.InvocationTargetException
 var totalItems = mutableListOf<String>()
 var positiveResults = mutableListOf<String>()
 var negativeResults = mutableListOf<String>()
-var sum = 0.0
 
 class AccuracyDBHandler(context: Context,
                         name: String?, factory: SQLiteDatabase.CursorFactory?,
@@ -20,13 +19,6 @@ class AccuracyDBHandler(context: Context,
 
 
     override fun onCreate(db: SQLiteDatabase) {
-//        val CREATE_RECIPES_TABLE = ("CREATE TABLE " +
-//                TABLE_recipes + "("
-//                + COLUMN_ID + " INTEGER PRIMARY KEY," +
-//                COLUMN_NAME
-//                + " TEXT," + ")")
-//        db.execSQL(CREATE_RECIPES_TABLE)
-
     }
 
     fun addPositive(context: Context) {
@@ -34,9 +26,6 @@ class AccuracyDBHandler(context: Context,
         val db = this.writableDatabase
 
         db.execSQL("UPDATE accuracy SET positive = positive + 1")
-
-        println("Added to database.")
-
         db.close()
 
         return
@@ -46,33 +35,19 @@ class AccuracyDBHandler(context: Context,
         val db = this.writableDatabase
 
         db.execSQL("UPDATE accuracy SET negative = negative + 1")
-
-        println("Added to database.")
-
         db.close()
 
         return
     }
 
-    fun clearDB(context: Context?) {
+    fun clearAccuracies(context: Context?) {
         val db = this.writableDatabase
 
         db.execSQL("UPDATE accuracy SET negative = 0;")
-
         db.execSQL("UPDATE accuracy SET positive = 0;")
-
-        println("Cleared database.")
         db.close()
 
         return
-    }
-
-    fun setSum(input: Double) {
-        sum = input
-    }
-
-    fun getSum(): Double {
-        return sum
     }
 
     fun queryDB(context: Context?) {
@@ -91,7 +66,6 @@ class AccuracyDBHandler(context: Context,
             var sum = negative + positive
             var positivePercent = positive / sum
             var negativePercent = negative / sum
-            setSum(sum.toDouble())
 
             totalItems.add(sum.toString())
             positiveResults.add(positivePercent.toString())
@@ -99,12 +73,8 @@ class AccuracyDBHandler(context: Context,
             negativeResults.add(negativePercent.toString())
             negativeResults.add(negative.toString())
 
-            println("Negative " + negative)
-            println("Positive " + positive)
             return
         }
-
-        println("Queried database.")
 
         db.close()
 
@@ -112,18 +82,11 @@ class AccuracyDBHandler(context: Context,
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int,
-                            newVersion: Int) {
-
-    }
+                            newVersion: Int) {    }
 
     companion object {
-
-        private val DATABASE_VERSION = 1
         internal val DATABASE_NAME = "accuracy.db"
         val TABLE = "accuracy"
-
-        val COLUMN_TRUE = "positive"
-        val COLUMN_FALSE = "negative"
     }
 
 }

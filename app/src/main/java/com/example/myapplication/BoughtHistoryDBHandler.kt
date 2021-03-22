@@ -22,53 +22,6 @@ class BoughtHistoryDBHandler(context: Context,
 
     }
 
-    fun lookupRecipe(context: Context, pos: Int) {
-        var name = myTitles[pos]
-        val dbHandler = MyDBHandler(context, null, null, 1)
-
-        println("_____SEARCHING FOR: " + name + "________")
-
-        var recipe = dbHandler.findRecipeBrowse(context, name)
-
-        if (recipe != null) {
-            println("RECIPE FOUND. Name is: " + recipe.recipeName + ". ID is: " + recipe.id)
-            println("Ingredients are: " + recipe.ingredients)
-
-            //Populate recyclerview
-            recipe.recipeName?.let { myTitles.add(it) }
-            recipe.ingredients?.let { myDetails.add(it) }
-            recipe.instructions?.let { myInstructions.add(it) }
-            myImages.add(R.drawable.food)
-
-            val HistdbHandler = HistoryDBHandler(context, null, null, 1)
-            HistdbHandler.addToQuery(context, name)
-
-            //Toast
-            val text = "Searching..."
-            val duration = Toast.LENGTH_SHORT
-            val toast = Toast.makeText(context, text, duration)
-            toast.show()
-        }
-        else {
-            val text = "No Match Found"
-            val duration = Toast.LENGTH_SHORT
-            val toast = Toast.makeText(context, text, duration)
-            toast.show()
-        }
-    }
-
-    fun deleteItem(context: Context, pos: Int) {
-        var name = myTitles[pos]
-        val dbHandler = BoughtHistoryDBHandler(context, null, null, 1)
-        println(name)
-        dbHandler.writableDatabase.execSQL("DELETE FROM cart WHERE food_name = '$name';")
-
-        myTitles.removeAt(pos)
-        myDetails.removeAt(pos)
-        myImages.removeAt(pos)
-        cartAdapter?.notifyDataSetChanged()
-    }
-
     fun addToHistory(context: Context) {
 
         val dbHandler = BoughtHistoryDBHandler(context, null, null, 1)
@@ -104,57 +57,8 @@ class BoughtHistoryDBHandler(context: Context,
         }
     }
 
-    fun callCart() {
-        var db = this.writableDatabase
-
-        var cursor = db.rawQuery("SELECT * FROM ${TABLE}", null)
-        myTitles.clear()
-        myDetails.clear()
-        myImages.clear()
-        myInstructions.clear()
-        cartAdapter!!.notifyDataSetChanged()
-
-        while (cursor.moveToNext()) {
-            val name = cursor.getString(0)
-            val group = cursor.getString(1)
-            if (myTitles.contains(name)) {
-                println("Duplicate")
-            } else {
-                myTitles.add(name)
-                myDetails.add(group)
-                myImages.add(R.drawable.food)
-            }
-            cartAdapter!!.notifyDataSetChanged()
-        }
-
-        cursor.close()
-        db.close()
-
-        return
-    }
-
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int,
-                           newVersion: Int) {
-
-    }
-
-    fun buildCart() {
-        var db = this.writableDatabase
-
-        var cursor = db.rawQuery("SELECT * FROM ${TABLE}", null)
-
-        while (cursor.moveToNext()) {
-            val name = cursor.getString(0)
-
-            cart.add(name)
-        }
-
-        cursor.close()
-        db.close()
-
-        println("CART CALLED")
-        return
-    }
+                           newVersion: Int) {    }
 
     companion object {
 

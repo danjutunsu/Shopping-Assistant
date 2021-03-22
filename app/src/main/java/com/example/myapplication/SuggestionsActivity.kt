@@ -65,79 +65,8 @@ class SuggestionsActivity : AppCompatActivity() {
         }
     }
 
-    private fun searchHistory(view: View) {
-        val dbHandler = HistoryDBHandler(view.context, null, null, 1)
-
-        dbHandler.searchDB(view.context)
-    }
-
     fun searchSuggestions(input: String) {
         MyDBHandler(this, null,null,1).findRecipeSuggestions(this, input)
-    }
-
-    fun getSuggestion(s: String): String? {
-//        return myTitles[position]
-        val dbHandler = MyDBHandler(this, null, null, 1)
-        val name: String? = dbHandler.findSuggestion(s)
-        title = name
-        return name
-    }
-
-    fun getIngredients(s: String): String? {
-//        return myTitles[position]
-        val dbHandler = MyDBHandler(this, null, null, 1)
-        val name: String? = dbHandler.findSuggestionIngredients(s)
-        return name
-    }
-
-    fun lookupSuggestedRecipes(view: View) {
-        val dbHandler = MyDBHandler(this, null, null, 1)
-
-        var name: String = ""
-
-        var recipe = dbHandler.findRecipeBrowse(this, name)
-
-        if (recipe != null) {
-            println("RECIPE FOUND. Name is: " + recipe.recipeName + ". ID is: " + recipe.id)
-            println("Ingredients are: " + recipe.ingredients)
-
-            //Populate recyclerview
-            recipe.recipeName?.let { myTitles.add(it) }
-            recipe.ingredients?.let { myDetails.add(it) }
-            recipe.instructions?.let { myInstructions.add(it) }
-            myImages.add(R.drawable.food)
-            browseAdapter!!.notifyDataSetChanged()
-
-            //Toast
-            val text = "Searching..."
-            val duration = Toast.LENGTH_SHORT
-            val toast = Toast.makeText(applicationContext, text, duration)
-            toast.show()
-        }
-        else {
-            val text = "No Match Found"
-            val duration = Toast.LENGTH_SHORT
-            val toast = Toast.makeText(applicationContext, text, duration)
-            toast.show()
-        }
-    }
-
-    fun deleteItem(pos: Int) {
-        myTitles.removeAt(pos)
-        myDetails.removeAt(pos)
-        myImages.removeAt(pos)
-        if (current == "CartActivity") {
-        cart.removeAt(pos)
-        }
-        adapter!!.notifyDataSetChanged()
-    }
-
-    fun addToLiked(pos: Int) {
-        if (current.equals("MainActivity")) {
-            likedRecipes.add(myTitles[pos])
-            likedRecipeIngredients.add(myDetails[pos])
-        }
-        println(likedRecipes)
     }
 
     fun lookupRecipe(view: View) {

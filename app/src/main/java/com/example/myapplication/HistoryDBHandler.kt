@@ -56,8 +56,6 @@ class HistoryDBHandler(context: Context,
 
         searchedRecipes.add(input)
 
-        println("Added " + input + " to history database.")
-
         while (cursor.moveToNext()) {
             val query = cursor.getString(0)
 

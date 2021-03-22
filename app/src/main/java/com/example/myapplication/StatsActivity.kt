@@ -5,11 +5,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.View.GONE
+import android.view.View.VISIBLE
+import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_cart.*
-import kotlinx.android.synthetic.main.list_layout.*
 
 var stats = mutableListOf<String>()
+var asked = mutableListOf<String>()
 var original = mutableListOf<String>()
 var statsGroup = mutableListOf<String>()
 var statsInstructions = mutableListOf<String>()
@@ -36,10 +38,6 @@ class StatsActivity() : AppCompatActivity() {
 
         for (element in statsGroup) {
             myDetails.add(element)
-        }
-
-        if (myTitles[0] in cart) {
-            println("It's in the cart!")
         }
 
         supportActionBar?.title = "Stats"
@@ -120,6 +118,6 @@ class StatsActivity() : AppCompatActivity() {
         val dbHandler = HistoryDBHandler(view.context, null, null, 1)
         val accuracyDBHandler = AccuracyDBHandler(view.context,null,null,1)
         dbHandler.clearSearches(view.context)
-        accuracyDBHandler.clearDB(view.context)
+        accuracyDBHandler.clearAccuracies(view.context)
     }
 }

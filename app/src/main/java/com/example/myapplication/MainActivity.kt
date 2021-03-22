@@ -1,15 +1,10 @@
 package com.example.myapplication
 
-import android.content.Context
 import android.content.Intent
-import android.database.sqlite.SQLiteOpenHelper
-import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -37,14 +32,14 @@ class MainActivity : AppCompatActivity() {
         myImages.removeAt(pos)
         if (current == "CartActivity") {
             cart.removeAt(pos)
-            cartAdapter?.notifyDataSetChanged()
+            cartAdapter!!.notifyDataSetChanged()
         }
         if (current == "FavoritesActivity") {
             likedRecipes.removeAt(pos)
             likedRecipeIngredients.removeAt(pos)
-            favoritesAdapter?.notifyDataSetChanged()
+            favoritesAdapter!!.notifyDataSetChanged()
         }
-        adapter!!.notifyDataSetChanged()
+        suggestionsAdapter!!.notifyDataSetChanged()
     }
 
     fun lookupRecipe(view: View) {
@@ -118,38 +113,6 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent);
     }
 
-
-    fun addToCart(pos: Int) {
-        var name = myTitles[pos]
-        var details = myDetails[pos]
-        val dbHandler = CartDBHandler(this, null, null, 1)
-
-        dbHandler.writableDatabase.execSQL("INSERT INTO cart('food_name', 'group') VALUES($name, $details")
-        cart.add(myTitles[pos])
-        myTitles.add(myTitles[pos])
-        myDetails.add(myTitles[pos] + " Details!")
-        myImages.add(R.drawable.food)
-        myInstructions.add("INSTRUCTIONS")
-        adapter!!.notifyDataSetChanged()
-    }
-
-    fun addToDetails(pos: Int) {
-        var tempTitle = myTitles[pos]
-        var tempDetails = myDetails[pos]
-        var tempInstructions = myInstructions[pos]
-        myTitles.clear()
-        myDetails.clear()
-        myImages.clear()
-        myInstructions.clear()
-        adapter!!.notifyDataSetChanged()
-
-        myTitles.add(tempTitle)
-        myDetails.add(tempDetails)
-        myImages.add(R.drawable.food)
-        myInstructions.add(tempInstructions)
-        adapter!!.notifyDataSetChanged()
-    }
-
     fun openCard(pos: Int) {
         selectedItem.add(myTitles[pos])
         adapter!!.notifyDataSetChanged()
@@ -185,6 +148,6 @@ class MainActivity : AppCompatActivity() {
             val dbHandler = HistoryDBHandler(view.context, null, null, 1)
             val accuracyDBHandler = AccuracyDBHandler(view.context,null,null,1)
             dbHandler.clearSearches(view.context)
-            accuracyDBHandler.clearDB(view.context)
+            accuracyDBHandler.clearAccuracies(view.context)
     }
 }
